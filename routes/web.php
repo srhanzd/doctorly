@@ -16,7 +16,7 @@ use App\Http\Controllers\StripePaymentController;
 */
 
 Route::get('/', 'HomeController@index');
-
+//////////////////////////////////////////////////////////////////
 // authentication routes
 Route::get('login', 'Auth\AuthController@showLoginForm');
 Route::post('login', 'Auth\AuthController@login');
