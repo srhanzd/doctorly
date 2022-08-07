@@ -36,6 +36,7 @@ class DoctorSeeder extends Seeder
             'degree' => 'MBBS',
             'experience' => '2 Year',
             'slot_time' => 25,
+            'clinic_id'=>2,
             'created_at' => now(),
             'updated_at' => now(),
         ]);
@@ -61,6 +62,7 @@ class DoctorSeeder extends Seeder
                 'degree' => 'MBBS',
                 'experience' => $item . 'year',
                 'slot_time' => 25,
+                'clinic_id'=>3,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
