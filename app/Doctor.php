@@ -17,7 +17,7 @@ class Doctor extends Model
         'is_deleted',
         'clinic_id'
     ];
-    public function clinic(){
-        return $this->belongsTo(Clinic::class,'clinic_id');
-    }
+//    public function clinic(){
+//        return $this->belongsTo(Clinic::class,'clinic_id');
+//    }
 }

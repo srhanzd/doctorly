@@ -15,9 +15,9 @@ class Clinic extends Model
     protected $hidden =[
     ];
 
-    public function doctor(){
-        return $this->hasMany(Doctor::class,'clinic_id','id');
-    }
+//    public function doctor(){
+//        return $this->hasMany(Doctor::class,'clinic_id','id');
+//    }
 
 //    public function services(){
 //        return $this->hasMany(Service::class,'clinic_id','id');
