@@ -37,5 +37,8 @@ class User extends EloquentUser
     function doctor(){
         return $this->hasOne(Doctor::class);
     }
+    public function clinic(){
+        return $this->belongsTo(Clinic::class);
+    }
 
 }

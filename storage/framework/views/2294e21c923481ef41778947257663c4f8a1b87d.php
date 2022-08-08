@@ -11,15 +11,37 @@
                     </li>
                     <?php if($role == 'admin'): ?>
                         <li class="nav-item dropdown">
+
                             <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-layout" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="bx bx-user-circle mr-2"></i><?php echo e(__('Doctors')); ?> <div class="arrow-down">
+                                <i class="bx bx-user-circle mr-2"></i><?php echo e(__('Clinics')); ?> <div class="arrow-down">
                                 </div>
+
                             </a>
-                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="topnav-layout">
-                                <a href="<?php echo e(url('doctor')); ?>" class="dropdown-item"><?php echo e(__('List of Doctors')); ?></a>
-                                <a href="<?php echo e(route('doctor.create')); ?>"
-                                    class="dropdown-item"><?php echo e(__('Add New Doctor')); ?></a>
+
+                            <div class="dropdown-menu dropdown-menu-right">
+
+                                    <div class="dropdown">
+                                        <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton"
+                                                data-mdb-toggle="dropdown" aria-expanded="false">
+                                            <?php echo e($clinics[0]->name); ?>
+
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            <li><a class="dropdown-item" href="doctor/<?php echo e($clinincs[0]->id); ?>">Action</a></li>
+                                            <li>
+                                                <a class="dropdown-item" href="#">Another action</a>
+                                            </li>
+                                        </ul>
+
+                                    </div>
+
+
+
+
+
+
+
                             </div>
                         </li>
                         <li class="nav-item dropdown">
@@ -34,6 +56,7 @@
                                 <a href="<?php echo e(route('patient.create')); ?>"
                                     class="dropdown-item"><?php echo e(__('Add New Patient')); ?></a>
                             </div>
+
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-layout" role="button"

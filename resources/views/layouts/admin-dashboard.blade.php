@@ -32,7 +32,10 @@
                 <div class="row">
                     <div class="col-sm-4">
                         <div class="avatar-md profile-user-wid mb-4">
-                            <img src="@if ($user->profile_photo != ''){{ URL::asset('storage/images/users/' . $user->profile_photo) }}@else{{ URL::asset('assets/images/users/noImage.png') }}@endif" alt="" class="img-thumbnail rounded-circle">
+                            <img src="@if ($user->profile_photo != '')
+                            {{ URL::asset('storage/images/users/' . $user->profile_photo) }}
+                            @else{{ URL::asset('assets/images/users/noImage.png') }}
+                            @endif" alt="" class="img-thumbnail rounded-circle">
                         </div>
                         <h5 class="font-size-15 text-truncate"> {{ $user->first_name }} {{ $user->last_name }} </h5>
                         <p class="text-muted mb-0 text-truncate">{{ __('Super Admin') }}</p>
@@ -44,7 +47,7 @@
                                     <a href="{{ url('/doctor') }}" class="mb-0 font-weight-medium font-size-15">
                                         <h5 class="mb-0">{{ number_format($data['total_doctors']) }}</h5>
                                     </a>
-                                    <p class="text-muted mb-0">{{ __('Doctors') }}</p>
+                                    <p class="text-muted mb-0">Clinics</p>
                                 </div>
                                 <div class="col-6">
                                     <a href="{{ url('/patient') }}" class="mb-0 font-weight-medium font-size-15">
@@ -292,21 +295,19 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($doctors as $item)
+                                    @foreach ($clinics as $item)
                                         <tr>
                                             <td>{{ $loop->index + 1 }}</td>
-                                            <td>{{ $item->first_name }} {{ $item->last_name }}</td>
-                                            <td>{{ $item->doctor->degree }}</td>
-                                            <td>{{ $item->mobile }}</td>
-                                            <td>{{ $item->email }}</td>
-                                            <td>
+                                            <td>{{ $item->name }}
                                                 <!-- Button trigger modal -->
-                                                <a href="{{ url('doctor/' . $item->id) }}">
+                                            <!--   <a href="{{ url('doctor/' . $item->id) }}">
                                                     <button type="button"
                                                         class="btn btn-primary btn-sm btn-rounded waves-effect waves-light">
                                                         {{ __('View Details') }}
+
                                                     </button>
                                                 </a>
+                                                -->
                                             </td>
                                         </tr>
                                     @endforeach

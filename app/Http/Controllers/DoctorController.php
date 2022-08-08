@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Appointment;
+use App\Clinic;
 use App\Doctor;
 use App\DoctorAvailableDay;
 use App\DoctorAvailableSlot;
@@ -18,6 +19,7 @@ use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\File;
+use PhpParser\Builder\Class_;
 
 class DoctorController extends Controller
 {
@@ -46,9 +48,16 @@ class DoctorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function clinic(){
+        return 'h';
+    }
+    public function index($id)
     {
+       // $id=$item->id;
+        return $id;
+$clinics=Clinic::query()->get();
         $user = Sentinel::getUser();
+
         if ($user->hasAccess('doctor.list')) {
             $role = $user->roles[0]->slug;
             $user = Sentinel::getUser();
@@ -59,9 +68,10 @@ class DoctorController extends Controller
                 $prescriptions_doctor = ReceptionListDoctor::where('reception_id', $user_id)->pluck('doctor_id');
                 $doctors = User::whereIN('id', $prescriptions_doctor)->where('is_deleted', 0)->paginate($this->limit);
             } else {
-                $doctors = $doctor_role->users()->with(['roles', 'doctor'])->where('is_deleted', 0)->orderByDesc('id')->paginate($this->limit);
+                $doctors = $doctor_role->users()->with(['roles', 'doctor'])
+                    ->where('is_deleted', 0)->orderByDesc('id')->paginate($this->limit);
             }
-            return view('doctor.doctors', compact('user', 'role', 'doctors'));
+            return view('doctor.doctors', compact('user', 'role', 'doctors','clinics'));
         } else {
             return view('error.403');
         }

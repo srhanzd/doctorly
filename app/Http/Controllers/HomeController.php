@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Appointment;
+use App\Clinic;
+use App\User;
 use Illuminate\Http\Request;
 use App\Doctor;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
@@ -37,11 +39,24 @@ class HomeController extends Controller
         $role = $user->roles[0]->slug;
         $today = Carbon::today()->format('Y/m/d');
         $time = date('H:i:s');
+        //$doctor_role = Sentinel::findRoleBySlug('doctor');
+        $doctors1  = User::join('doctors', 'users.id', '=', 'doctors.user_id')->where('clinic_id', 1)
+            ->get(['users.*', 'doctors.*']);
+        $doctors2  = User::join('doctors', 'users.id', '=', 'doctors.user_id')->where('clinic_id', 2)
+            ->get(['users.*', 'doctors.*']);
+        $doctors3  = User::join('doctors', 'users.id', '=', 'doctors.user_id')->where('clinic_id', 3)
+            ->get(['users.*', 'doctors.*']);
+        $doctors4  = User::join('doctors', 'users.id', '=', 'doctors.user_id')->where('clinic_id', 4)
+            ->get(['users.*', 'doctors.*']);
+        $doctors5  = User::join('doctors', 'users.id', '=', 'doctors.user_id')->where('clinic_id', 5)
+            ->get(['users.*', 'doctors.*']);
+
+
+        $clinics=Clinic::query()->get()->all();
         if ($role == 'admin') {
             $patient_role = Sentinel::findRoleBySlug('patient');
             $patients = $patient_role->users()->with('roles')->orderBy('id', 'DESC')->where('is_deleted', 0)->limit(5)->get();
-            $doctor_role = Sentinel::findRoleBySlug('doctor');
-            $doctors = $doctor_role->users()->with(['doctor'])->where('is_deleted', 0)->orderBy('id', 'DESC')->limit(5)->get();
+
             $receptionist_role = Sentinel::findRoleBySlug('receptionist');
             $receptionists = $receptionist_role->users()->with('roles')->orderBy('id', 'DESC')->where('is_deleted', 0)->limit(5)->get();
             $tot_patient = $patient_role->users()->with('roles')->get();
@@ -80,7 +95,8 @@ class HomeController extends Controller
                 'monthly_earning' => $monthlyEarning['monthlyEarning'],
                 'monthly_diff' => $monthlyEarning['diff']
             ];
-            return view('index', compact('user', 'role', 'patients', 'doctors', 'receptionists', 'data'));
+            return view('index', compact('user', 'role', 'patients', 'doctors1','doctors2'
+                ,'doctors3','doctors4','doctors5','clinics', 'receptionists', 'data'));
         } elseif ($role == 'doctor') {
             $doctor_info = Doctor::where('user_id', '=', $user->id)->first();
             $appointments = Appointment::with('patient')
@@ -145,7 +161,9 @@ class HomeController extends Controller
                 'monthly_earning' => $monthlyEarning['monthlyEarning'],
                 'monthly_diff' => $monthlyEarning['diff']
             ];
-            return view('index', compact('user', 'role', 'doctor_info', 'appointments', 'data'));
+            return view('index', compact('user',
+                'doctors1','doctors2'
+                ,'doctors3','doctors4','doctors5','clinics','role', 'doctor_info', 'appointments', 'data'));
         } elseif ($role == 'receptionist') {
             $today = Carbon::today()->format('Y/m/d');
             $user_id = Sentinel::getUser();
@@ -214,7 +232,9 @@ class HomeController extends Controller
                 'monthly_earning' => $monthlyEarning['monthlyEarning'],
                 'monthly_diff' => $monthlyEarning['diff']
             ];
-            return view('index', compact('user', 'role', 'patients', 'doctors', 'appointments', 'data', 'Upcoming_appointment'));
+            return view('index', compact('user',
+                'doctors1','doctors2'
+                ,'doctors3','doctors4','doctors5','clinics','role', 'patients', 'doctors', 'appointments', 'data', 'Upcoming_appointment'));
         } elseif ($role == 'patient') {
             $appointments = Appointment::with('doctor', 'timeSlot')->where('appointment_for', $user_id)->orderBy('id', 'DESC')->limit(5)->get();
             $tot_appointment = Appointment::where('appointment_for', $user_id)->get();
@@ -250,7 +270,9 @@ class HomeController extends Controller
                 'monthly_earning' => $monthlyEarning['monthlyEarning'],
                 'monthly_diff' => $monthlyEarning['diff']
             ];
-            return view('index', compact('user', 'role', 'appointments', 'data'));
+            return view('index', compact('user',
+                'doctors1','doctors2'
+                ,'doctors3','doctors4','doctors5','clinics','role', 'appointments', 'data'));
         }
     }
 

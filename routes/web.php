@@ -14,8 +14,10 @@ use App\Http\Controllers\StripePaymentController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+Route::get('doctor/{$id}', 'DoctorController@edit');
 Route::get('/', 'HomeController@index');
+Route::get('clinic/{$id}', 'DoctorController@clinic');
+
 //////////////////////////////////////////////////////////////////
 // authentication routes
 Route::get('login', 'Auth\AuthController@showLoginForm');
@@ -38,7 +40,7 @@ Route::get('profile-view', 'UserController@profile_view');
 
 // resource routes
 Route::resource('user', 'UserController');
-Route::resource('doctor', 'DoctorController');
+//->name('doctor.g');
 Route::resource('patient', 'PatientController');
 Route::resource('receptionist', 'ReceptionistController');
 Route::resource('appointment', 'AppointmentController');

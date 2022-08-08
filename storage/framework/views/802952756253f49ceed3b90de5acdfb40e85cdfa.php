@@ -32,7 +32,12 @@
                 <div class="row">
                     <div class="col-sm-4">
                         <div class="avatar-md profile-user-wid mb-4">
-                            <img src="<?php if($user->profile_photo != ''): ?><?php echo e(URL::asset('storage/images/users/' . $user->profile_photo)); ?><?php else: ?><?php echo e(URL::asset('assets/images/users/noImage.png')); ?><?php endif; ?>" alt="" class="img-thumbnail rounded-circle">
+                            <img src="<?php if($user->profile_photo != ''): ?>
+                            <?php echo e(URL::asset('storage/images/users/' . $user->profile_photo)); ?>
+
+                            <?php else: ?><?php echo e(URL::asset('assets/images/users/noImage.png')); ?>
+
+                            <?php endif; ?>" alt="" class="img-thumbnail rounded-circle">
                         </div>
                         <h5 class="font-size-15 text-truncate"> <?php echo e($user->first_name); ?> <?php echo e($user->last_name); ?> </h5>
                         <p class="text-muted mb-0 text-truncate"><?php echo e(__('Super Admin')); ?></p>
@@ -44,7 +49,7 @@
                                     <a href="<?php echo e(url('/doctor')); ?>" class="mb-0 font-weight-medium font-size-15">
                                         <h5 class="mb-0"><?php echo e(number_format($data['total_doctors'])); ?></h5>
                                     </a>
-                                    <p class="text-muted mb-0"><?php echo e(__('Doctors')); ?></p>
+                                    <p class="text-muted mb-0">Clinics</p>
                                 </div>
                                 <div class="col-6">
                                     <a href="<?php echo e(url('/patient')); ?>" class="mb-0 font-weight-medium font-size-15">
@@ -295,22 +300,21 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php $__currentLoopData = $doctors; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <?php $__currentLoopData = $clinics; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <tr>
                                             <td><?php echo e($loop->index + 1); ?></td>
-                                            <td><?php echo e($item->first_name); ?> <?php echo e($item->last_name); ?></td>
-                                            <td><?php echo e($item->doctor->degree); ?></td>
-                                            <td><?php echo e($item->mobile); ?></td>
-                                            <td><?php echo e($item->email); ?></td>
-                                            <td>
+                                            <td><?php echo e($item->name); ?>
+
                                                 <!-- Button trigger modal -->
-                                                <a href="<?php echo e(url('doctor/' . $item->id)); ?>">
+                                            <!--   <a href="<?php echo e(url('doctor/' . $item->id)); ?>">
                                                     <button type="button"
                                                         class="btn btn-primary btn-sm btn-rounded waves-effect waves-light">
                                                         <?php echo e(__('View Details')); ?>
 
+
                                                     </button>
                                                 </a>
+                                                -->
                                             </td>
                                         </tr>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
