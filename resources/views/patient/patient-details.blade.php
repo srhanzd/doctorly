@@ -71,12 +71,15 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
+                        @if($role=='patient')
                         <blockquote>{{ __('Basic Information') }}</blockquote>
+                        @endif
                         <form action="@if ($patient ) {{ url('patient/' . $patient->id) }} @else {{ route('patient.store') }} @endif" method="post" enctype="multipart/form-data">
                             @csrf
                             @if ($patient )
                                 <input type="hidden" name="_method" value="PATCH" />
                             @endif
+                            @if($role=='patient')
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="row">
@@ -207,6 +210,7 @@
                                     </div>
                                 </div>
                             </div>
+                            @endif
                             <blockquote>{{ __('Medical Information') }}</blockquote>
                             <div class="row">
                                 <div class="col-md-6">

@@ -94,6 +94,7 @@ class PatientController extends Controller
      */
     public function store(Request $request)
     {
+
         $user = Sentinel::getUser();
         if ($user->hasAccess('patient.create')) {
             $validatedData = $request->validate([
@@ -234,17 +235,10 @@ class PatientController extends Controller
      */
     public function update(Request $request, User $patient)
     {
-        // return $request;
+         //return $request;
         $user = Sentinel::getUser();
         if ($user->hasAccess('patient.update')) {
             $validatedData = $request->validate([
-                'first_name' => 'required|alpha',
-                'last_name' => 'required|alpha',
-                'mobile' => 'required|numeric|digits:10',
-                'email' => 'required|email',
-                'age' => 'required|numeric',
-                'address' => 'required',
-                'gender' => 'required',
                 'height' => 'required',
                 'b_group' => 'required',
                 'pulse' => 'required',
@@ -253,11 +247,25 @@ class PatientController extends Controller
                 'b_pressure' => 'required',
                 'respiration' => 'required',
                 'diet' => 'required',
-                'profile_photo'=>'image|mimes:jpg,png,jpeg,gif,svg|max:500'
             ]);
+
             try {
                 $user = Sentinel::getUser();
                 $role = $user->roles[0]->slug;
+                if($role=='patient') {
+                    $validatedData = $request->validate([
+                        'first_name' => 'required|alpha',
+                        'last_name' => 'required|alpha',
+                        'mobile' => 'required|numeric|digits:10',
+                        'email' => 'required|email',
+                        'age' => 'required|numeric',
+                        'address' => 'required',
+                        'gender' => 'required',
+                        'profile_photo' => 'image|mimes:jpg,png,jpeg,gif,svg|max:5000'
+                    ]);
+                }
+
+
                 if ($request->hasFile('profile_photo')) {
                     $des = 'app/public/images/users/.' . $patient->profile_photo;
                     if (File::exists($des)) {
@@ -269,28 +277,29 @@ class PatientController extends Controller
                     $file->move(storage_path('app/public/images/users'), $imageName);
                     $patient->profile_photo = $imageName;
                 }
-                $patient->first_name = $validatedData['first_name'];
-                $patient->last_name = $validatedData['last_name'];
-                $patient->mobile = $validatedData['mobile'];
-                $patient->email = $validatedData['email'];
-                $patient->updated_by = $user->id;
-                $patient->save();
-                $patient_info= Patient::where('user_id', '=', $patient->id)->first();
-                    if($patient_info == null){
+                if($role=='patient') {
+                    $patient->first_name = $validatedData['first_name'];
+                    $patient->last_name = $validatedData['last_name'];
+                    $patient->mobile = $validatedData['mobile'];
+                    $patient->email = $validatedData['email'];
+                    $patient->updated_by = $user->id;
+                    $patient->save();
+                    $patient_info = Patient::where('user_id', '=', $patient->id)->first();
+                    if ($patient_info == null) {
                         $patient_info = new Patient();
                         $patient_info->age = $request->age;
                         $patient_info->gender = $request->gender;
                         $patient_info->address = $request->address;
                         $patient_info->user_id = $patient->id;
                         $patient_info->save();
-                    }
-                    else{
+                    } else {
                         $patient_info->age = $request->age;
                         $patient_info->gender = $request->gender;
                         $patient_info->address = $request->address;
                         $patient_info->user_id = $patient->id;
                         $patient_info->save();
                     }
+                }
                     $medical_info = MedicalInfo::where('user_id', '=', $patient->id)->first();
                     if($medical_info == null){
                         $medical_info = new MedicalInfo();

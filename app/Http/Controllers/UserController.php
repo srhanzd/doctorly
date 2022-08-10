@@ -76,11 +76,12 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+//        return 'kk';
         $validation = $request->validate([
             'age' => 'required|numeric',
             'address' => 'required',
             'gender' => 'required',
-            'profile_photo' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:500',
+         //   'profile_photo' => 'image|mimes:jpg,png,jpeg,gif,svg|max:500',//required|
             'height' => 'required',
             'b_group' => 'required',
             'pulse' => 'required',
@@ -113,7 +114,7 @@ class UserController extends Controller
             $patient_Details->gender = $request->gender;
             $patient_Details->address = $request->address;
             $patient_Details->save();
-            return $patient_Details;
+           // return $patient_Details;
             // medical info save
             $medical_info = new MedicalInfo();
             $medical_info->user_id = $patient_id;

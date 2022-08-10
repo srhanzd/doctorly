@@ -60,6 +60,7 @@
                                                     <i class="mdi mdi-eye"></i>
                                                 </button>
                                             </a>
+                                            @if($role!='admin'&&$role!='receptionist')
                                             <a href="{{ url('patient/' . $patient->id . '/edit') }}">
                                                 <button type="button"
                                                     class="btn btn-primary btn-sm btn-rounded waves-effect waves-light mb-2 mb-md-0"
@@ -67,6 +68,7 @@
                                                     <i class="mdi mdi-lead-pencil"></i>
                                                 </button>
                                             </a>
+                                            @endif
                                             <a href=" javascript:void(0)">
                                                 <button type="button"
                                                     class="btn btn-primary btn-sm btn-rounded waves-effect waves-light mb-2 mb-md-0"

@@ -96,6 +96,7 @@ class AuthController extends Controller
      */
     public function register(Request $request)
     {
+
         $validatedData = $request->validate([
             'first_name' => 'required|alpha',
             'last_name' => 'required|alpha',

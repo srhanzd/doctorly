@@ -17,7 +17,7 @@
                                 <div class="col-7">
                                     <div class="text-primary p-4">
                                         <h5 class="text-primary">{{ __("Patient Register") }}</h5>
-                                        <p>Get your free {{ config('app.name'); }} Patient account now.</p>
+                                        <p>Get your free {{ config('app.name') }} Patient account now.</p>
                                     </div>
                                 </div>
                                 <div class="col-5 align-self-end">

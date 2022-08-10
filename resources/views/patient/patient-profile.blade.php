@@ -59,9 +59,11 @@
                                         </div>
                                     </div>
                                     <div class="mt-4">
+                                        @if($role!='admin'&&$role!='receptionist')
                                         <a href="{{ url('patient/' . $patient->id . '/edit') }}"
                                             class="btn btn-primary waves-effect waves-light btn-sm">{{ __('Edit Profile ') }}<i
                                                 class="mdi mdi-arrow-right ml-1"></i></a>
+                                        @endif
                                     </div>
                                 </div>
                             </div>

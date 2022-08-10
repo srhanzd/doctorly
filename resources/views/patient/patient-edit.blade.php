@@ -36,9 +36,12 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
+                        @if($role=='patient')
                         <blockquote>{{ __('Basic Information') }}</blockquote>
+                        @endif
                         <form action="{{ url('profile-update') }}" method="post" enctype="multipart/form-data">
                             @csrf
+                            @if($role=='patient')
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="row">
@@ -169,6 +172,7 @@
                                     </div>
                                 </div>
                             </div>
+                            @endif
                             <blockquote>{{ __('Medical Information') }}</blockquote>
                             <div class="row">
                                 <div class="col-md-6">
