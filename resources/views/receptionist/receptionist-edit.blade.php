@@ -106,16 +106,17 @@
 
                                     <div class="row">
                                         <div class="col-md-12 form-group">
-                                            <label class="control-label">{{ __('Doctor ') }}<span
-                                                    class="text-danger">*</span></label>
-                                            <select class="form-control select2 @error('doctor') is-invalid @enderror"
-                                                name="doctor[]" id="doctor" multiple="multiple">
-                                                @foreach ($doctors as $item)
-                                                    <option value="{{ $item->id }}"
-                                                        {{ in_array($item->id, $doctor_user) ? 'selected' : '' }}>
-                                                        {{ $item->first_name }} {{ $item->last_name }}</option>
-                                                @endforeach
-                                            </select>
+{{--                                            <label class="control-label">{{ __('Doctor ') }}<span--}}
+{{--                                                    class="text-danger">*</span></label>--}}
+{{--                                            <select class="form-control select2 @error('doctor') is-invalid @enderror"--}}
+{{--                                                name="doctor[]" id="doctor" multiple="multiple">--}}
+{{--                                                @foreach ($doctors as $item)--}}
+{{--                                                    <option value="{{ $item->id }}"--}}
+{{--                                                        {{ in_array($item->id, $doctor_user) ? 'selected' : '' }}>--}}
+{{--                                                        {{ $item->first_name }} {{ $item->last_name }}</option>--}}
+{{--                                                @endforeach--}}
+{{--                                            </select>--}}
+{{--                                            --}}
                                             @error('doctor')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>

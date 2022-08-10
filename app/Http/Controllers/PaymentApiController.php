@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Clinic;
+use App\User;
 use Exception;
 use App\PaymentApi;
 use Illuminate\Http\Request;
@@ -15,12 +17,15 @@ class PaymentApiController extends Controller
      */
     public function index()
     {
+        $doctors  = User::join('doctors', 'users.id', '=', 'doctors.user_id')
+            ->get(['users.*', 'doctors.*']);
+        $clinics=Clinic::query()->get();
         //
         $user = Sentinel::getUser();
         $role = $user->roles[0]->slug;
         $razorpay = PaymentApi::where('gateway_type',1)->where('is_deleted',0)->first();
         $stripe = PaymentApi::where('gateway_type',2)->where('is_deleted',0)->first();
-        return view('admin.payment-key',compact('user','role','razorpay','stripe'));
+        return view('admin.payment-key',compact('doctors','clinics','user','role','razorpay','stripe'));
     }
 
     /**

@@ -33,6 +33,7 @@
                                     <th><?php echo e(__('Name')); ?></th>
                                     <th><?php echo e(__('Contact No')); ?></th>
                                     <th><?php echo e(__('Email')); ?></th>
+                                    <th><?php echo e(__('Clinic')); ?></th>
                                     <?php if($role != 'patient'): ?>
                                         <th><?php echo e(__('Option')); ?></th>
                                     <?php endif; ?>
@@ -61,6 +62,16 @@
                                         <td> <?php echo e($item->first_name); ?> <?php echo e($item->last_name); ?> </td>
                                         <td> <?php echo e($item->mobile); ?> </td>
                                         <td> <?php echo e($item->email); ?> </td>
+                                        <td>
+                                        <?php $__currentLoopData = $clinics; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item1): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <?php if($item->doctor['clinic_id']==$item1->id): ?>
+                                                    <?php echo e($item1->name); ?>
+
+                                            <?php endif; ?>
+
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                        </td>
+
                                         <?php if($role != 'patient'): ?>
                                             <td>
                                                 <?php if($role == 'admin'): ?>
@@ -72,7 +83,7 @@
                                                         </button>
                                                     </a>
                                                 <?php elseif($role == 'receptionist'): ?>
-                                                    <a href="<?php echo e(url('doctor-view/' . $item->id)); ?>">
+                                                    <a href="<?php echo e(url('/doctor/'.$item->id)); ?>">
                                                         <button type="button"
                                                             class="btn btn-primary btn-sm btn-rounded waves-effect waves-light mb-2 mb-md-0"
                                                             title="View Profile">

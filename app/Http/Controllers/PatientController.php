@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Appointment;
+use App\Clinic;
 use App\Invoice;
 use App\InvoiceDetail;
 use App\Patient;
@@ -47,12 +48,15 @@ class PatientController extends Controller
      */
     public function index()
     {
+        $doctors  = User::join('doctors', 'users.id', '=', 'doctors.user_id')
+            ->get(['users.*', 'doctors.*']);
+        $clinics=Clinic::query()->get();
         $user = Sentinel::getUser();
         if ($user->hasAccess('patient.list')) {
             $role = $user->roles[0]->slug;
             $patient_role = Sentinel::findRoleBySlug('patient');
             $patients = $patient_role->users()->with('roles')->where('is_deleted', 0)->orderByDesc('id')->paginate($this->limit);
-            return view('patient.patients', compact('user', 'role', 'patients'));
+            return view('patient.patients', compact('clinics','doctors','user', 'role', 'patients'));
         } else {
              return view('error.403');
 
@@ -66,13 +70,16 @@ class PatientController extends Controller
      */
     public function create()
     {
+        $doctors  = User::join('doctors', 'users.id', '=', 'doctors.user_id')
+            ->get(['users.*', 'doctors.*']);
+        $clinics=Clinic::query()->get();
         $user = Sentinel::getUser();
         if ($user->hasAccess('patient.create')) {
             $role = $user->roles[0]->slug;
             $patient = null;
             $patient_info = null;
             $medical_info = null;
-            return view('patient.patient-details', compact('user', 'role', 'patient', 'patient_info', 'medical_info'));
+            return view('patient.patient-details', compact('doctors','clinics','user', 'role', 'patient', 'patient_info', 'medical_info'));
         } else {
                         return view('error.403');
 
@@ -148,6 +155,9 @@ class PatientController extends Controller
      */
     public function show(User $patient)
     {
+        $doctors  = User::join('doctors', 'users.id', '=', 'doctors.user_id')
+            ->get(['users.*', 'doctors.*']);
+        $clinics=Clinic::query()->get();
         $user = Sentinel::getUser();
         if ($user->hasAccess('patient.view')) {
             $role = $user->roles[0]->slug;
@@ -172,7 +182,7 @@ class PatientController extends Controller
                         'revenue' => $revenue,
                         'pending_bill' => $pending_bill
                     ];
-                    return view('patient.patient-profile', compact('user', 'role', 'patient', 'patient_info', 'medical_Info', 'data', 'appointments', 'prescriptions', 'invoices'));
+                    return view('patient.patient-profile', compact('doctors','clinics','user', 'role', 'patient', 'patient_info', 'medical_Info', 'data', 'appointments', 'prescriptions', 'invoices'));
                 } else {
                     return redirect('/')->with('error', 'Patient information  not found, update patient information');
                 }
@@ -193,6 +203,9 @@ class PatientController extends Controller
      */
     public function edit(User $patient)
     {
+        $doctors  = User::join('doctors', 'users.id', '=', 'doctors.user_id')
+            ->get(['users.*', 'doctors.*']);
+        $clinics=Clinic::query()->get();
         $user = Sentinel::getUser();
         $patient = $user::whereHas('roles',function($rq){
             $rq->where('slug','patient');
@@ -202,7 +215,7 @@ class PatientController extends Controller
                 $role = $user->roles[0]->slug;
                 $patient_info = Patient::where('user_id', '=', $patient->id)->first();
                 $medical_info = MedicalInfo::where('user_id', '=', $patient->id)->first();
-                return view('patient.patient-details', compact('user', 'role', 'patient', 'patient_info', 'medical_info'));
+                return view('patient.patient-details', compact('doctors','clinics','user', 'role', 'patient', 'patient_info', 'medical_info'));
             } else {
                 return view('error.403');
             }

@@ -33,6 +33,7 @@
                                     <th>{{ __('Name') }}</th>
                                     <th>{{ __('Contact No') }}</th>
                                     <th>{{ __('Email') }}</th>
+                                    <th>{{ __('Clinic') }}</th>
                                     @if ($role != 'patient')
                                         <th>{{ __('Option') }}</th>
                                     @endif
@@ -60,6 +61,15 @@
                                         <td> {{ $item->first_name }} {{ $item->last_name }} </td>
                                         <td> {{ $item->mobile }} </td>
                                         <td> {{ $item->email }} </td>
+                                        <td>
+                                        @foreach($clinics as $item1)
+                                            @if($item->doctor['clinic_id']==$item1->id)
+                                                    {{ $item1->name }}
+                                            @endif
+
+                                        @endforeach
+                                        </td>
+
                                         @if ($role != 'patient')
                                             <td>
                                                 @if ($role == 'admin')
@@ -71,7 +81,7 @@
                                                         </button>
                                                     </a>
                                                 @elseif ($role == 'receptionist')
-                                                    <a href="{{ url('doctor-view/' . $item->id) }}">
+                                                    <a href="{{ url('/doctor/'.$item->id) }}">
                                                         <button type="button"
                                                             class="btn btn-primary btn-sm btn-rounded waves-effect waves-light mb-2 mb-md-0"
                                                             title="View Profile">

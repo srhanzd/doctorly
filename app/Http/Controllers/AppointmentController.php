@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Appointment;
+use App\Clinic;
 use App\DoctorAvailableDay;
 use App\DoctorAvailableSlot;
 use App\DoctorAvailableTime;
@@ -60,6 +61,9 @@ class AppointmentController extends Controller
      */
     public function create()
     {
+        $doctors  = User::join('doctors', 'users.id', '=', 'doctors.user_id')
+            ->get(['users.*', 'doctors.*']);
+        $clinics=Clinic::query()->get();
         $user = Sentinel::getUser();
         if ($user->hasAccess('appointment.create')) {
             $userId = $user->id;
@@ -82,7 +86,7 @@ class AppointmentController extends Controller
                     })->where('appointment_date', Carbon::today())
                     ->get();
             }
-            return view('appointment.appointment', compact('user', 'role', 'patients', 'doctors', 'appointments'));
+            return view('appointment.appointment', compact('doctors','clinics','user', 'role', 'patients', 'doctors', 'appointments'));
         } else {
             return view('error.403');
         }
@@ -174,6 +178,9 @@ class AppointmentController extends Controller
     }
     public function AppointmentList(User $patient)
     {
+        $doctors  = User::join('doctors', 'users.id', '=', 'doctors.user_id')
+            ->get(['users.*', 'doctors.*']);
+        $clinics=Clinic::query()->get();
         $user = Sentinel::getUser();
         if ($user->hasAccess('appointment.list')) {
             $user_id = Sentinel::getUser()->id;
@@ -263,7 +270,7 @@ class AppointmentController extends Controller
                 $Upcoming_appointment = Appointment::with('doctor', 'patient')->where('appointment_date', '>', $today)->where('status', 0)->orderBy('id', 'DESC')->get();
                 $Cancel_appointment = Appointment::with('doctor', 'patient')->where('status', 2)->orderBy('id', 'DESC')->get();
             }
-            return view('appointment.appointment-list', compact('user', 'role', 'pending_appointment', 'Upcoming_appointment', 'Complete_appointment', 'Cancel_appointment'));
+            return view('appointment.appointment-list', compact('doctors','clinics','user', 'role', 'pending_appointment', 'Upcoming_appointment', 'Complete_appointment', 'Cancel_appointment'));
         } else {
             return view('error.403');
         }
@@ -509,6 +516,9 @@ class AppointmentController extends Controller
 
     public function appointment_create()
     {
+        $doctors  = User::join('doctors', 'users.id', '=', 'doctors.user_id')
+            ->get(['users.*', 'doctors.*']);
+        $clinics=Clinic::query()->get();
         $user = Sentinel::getUser();
         $user = Sentinel::getUser();
         if ($user->hasAccess('appointment.create')) {
@@ -522,7 +532,8 @@ class AppointmentController extends Controller
             $doctors = $doctor_role->users()->with('roles')->where('is_deleted', 0)->get();
             if ($role == 'receptionist') {
                 $receptionists_doctor_id = ReceptionListDoctor::where('reception_id', $userId)->pluck('doctor_id');
-                $doctors = $doctor_role->users()->with('roles')->whereIN('id', $receptionists_doctor_id)->where('is_deleted', 0)->get();
+                $doctors = $doctor_role->users()->with('roles')->where('is_deleted', 0)->get();
+//                ->whereIN('id', $receptionists_doctor_id)
             }
             $dayArray = collect();
             if ($role == 'doctor') {
@@ -550,7 +561,7 @@ class AppointmentController extends Controller
                 }
                 $doctor_available_time = DoctorAvailableTime::where('doctor_id', $userId)->where('is_deleted', 0)->get();
             }
-            return view('appointment.appointment_create', compact('user', 'role', 'patients', 'doctors', 'doctor_available_day', 'doctor_available_time', 'dayArray'));
+            return view('appointment.appointment_create', compact('doctors','clinics','user', 'role', 'patients', 'doctors', 'doctor_available_day', 'doctor_available_time', 'dayArray'));
         } else {
             return view('error.403');
         }
@@ -766,6 +777,9 @@ class AppointmentController extends Controller
 
     public function pending_appointment(User $patient)
     {
+        $doctors  = User::join('doctors', 'users.id', '=', 'doctors.user_id')
+            ->get(['users.*', 'doctors.*']);
+        $clinics=Clinic::query()->get();
         $user = Sentinel::getUser();
         if ($user->hasAccess('appointment.list')) {
             $user_id = Sentinel::getUser()->id;
@@ -782,14 +796,14 @@ class AppointmentController extends Controller
             } elseif ($role == 'receptionist') {
                 $receptionists_doctor_id = ReceptionListDoctor::where('reception_id', $user_id)->pluck('doctor_id');
                 $pending_appointment = Appointment::with('doctor', 'patient', 'timeSlot')->where(function ($re) use ($user_id, $receptionists_doctor_id) {
-                    $re->whereIN('appointment_with', $receptionists_doctor_id);
-                    $re->orWhereIN('booked_by', $receptionists_doctor_id);
-                    $re->orWhere('booked_by', $user_id);
+                    //$re->whereIN('appointment_with', $receptionists_doctor_id);
+                   // $re->orWhereIN('booked_by', $receptionists_doctor_id);
+                   // $re->orWhere('booked_by', $user_id);
                 })->where('status', 0)->orderBy('id', 'DESC')->paginate($this->limit);
             } else {
                 $pending_appointment = Appointment::with('doctor', 'patient')->where(['status' => 0])->orderBy('id', 'DESC')->paginate($this->limit);
             }
-            return view('appointment.pending-appointment', compact('user', 'role', 'pending_appointment'));
+            return view('appointment.pending-appointment', compact('doctors','clinics','user', 'role', 'pending_appointment'));
         } else {
             return view('error.403');
         }
@@ -797,6 +811,9 @@ class AppointmentController extends Controller
 
     public function upcoming_appointment(User $patient)
     {
+        $doctors  = User::join('doctors', 'users.id', '=', 'doctors.user_id')
+            ->get(['users.*', 'doctors.*']);
+        $clinics=Clinic::query()->get();
         $user = Sentinel::getUser();
         $user = Sentinel::getUser();
         if ($user->hasAccess('appointment.list')) {
@@ -834,9 +851,9 @@ class AppointmentController extends Controller
             } elseif ($role == 'receptionist') {
                 $receptionists_doctor_id = ReceptionListDoctor::where('reception_id', $user_id)->pluck('doctor_id');
                 $Upcoming_appointment = Appointment::with('patient', 'doctor', 'timeSlot')->where(function ($re) use ($user_id, $receptionists_doctor_id) {
-                    $re->orWhereIN('appointment_with', $receptionists_doctor_id);
-                    $re->orWhere('booked_by', $user_id);
-                    $re->orWhereIN('booked_by', $receptionists_doctor_id);
+                    //$re->orWhereIN('appointment_with', $receptionists_doctor_id);
+                    //$re->orWhere('booked_by', $user_id);
+                    //$re->orWhereIN('booked_by', $receptionists_doctor_id);
                 })
                     ->whereDate('appointment_date', '>', $today)
                     ->orWhere(function ($re) use ($today, $time) {
@@ -851,7 +868,7 @@ class AppointmentController extends Controller
                 })
                     ->paginate($this->limit);
             }
-            return view('appointment.upcoming-appointment', compact('user', 'role', 'Upcoming_appointment'));
+            return view('appointment.upcoming-appointment', compact('doctors','clinics','user', 'role', 'Upcoming_appointment'));
         } else {
             return view('error.403');
         }
@@ -859,6 +876,9 @@ class AppointmentController extends Controller
 
     public function complete_appointment(User $patient)
     {
+        $doctors  = User::join('doctors', 'users.id', '=', 'doctors.user_id')
+            ->get(['users.*', 'doctors.*']);
+        $clinics=Clinic::query()->get();
         $user = Sentinel::getUser();
         if ($user->hasAccess('appointment.list')) {
 
@@ -876,14 +896,14 @@ class AppointmentController extends Controller
             } elseif ($role == 'receptionist') {
                 $receptionists_doctor_id = ReceptionListDoctor::where('reception_id', $user_id)->pluck('doctor_id');
                 $Complete_appointment = Appointment::with('doctor', 'patient', 'timeSlot')->where(function ($re) use ($user_id, $receptionists_doctor_id) {
-                    $re->whereIN('appointment_with', $receptionists_doctor_id);
-                    $re->orWhereIN('booked_by', $receptionists_doctor_id);
-                    $re->orWhere('booked_by', $user_id);
+                   // $re->whereIN('appointment_with', $receptionists_doctor_id);
+                    //$re->orWhereIN('booked_by', $receptionists_doctor_id);
+                    //$re->orWhere('booked_by', $user_id);
                 })->where('status', 1)->orderBy('id', 'DESC')->paginate($this->limit);
             } else {
                 $Complete_appointment = Appointment::with('doctor', 'patient')->where(['status' => 1])->orderBy('id', 'DESC')->paginate($this->limit);
             }
-            return view('appointment.complete-appointment', compact('user', 'role', 'Complete_appointment'));
+            return view('appointment.complete-appointment', compact('doctors','clinics','user', 'role', 'Complete_appointment'));
         } else {
             return view('error.403');
         }
@@ -891,6 +911,9 @@ class AppointmentController extends Controller
 
     public function cancel_appointment(User $patient)
     {
+        $doctors  = User::join('doctors', 'users.id', '=', 'doctors.user_id')
+            ->get(['users.*', 'doctors.*']);
+        $clinics=Clinic::query()->get();
         $user = Sentinel::getUser();
         if ($user->hasAccess('appointment.list')) {
             $user_id = Sentinel::getUser()->id;
@@ -912,15 +935,15 @@ class AppointmentController extends Controller
             } elseif ($role == 'receptionist') {
                 $receptionists_doctor_id = ReceptionListDoctor::where('reception_id', $user_id)->pluck('doctor_id');
                 $Cancel_appointment = Appointment::with('doctor', 'patient', 'timeSlot')->where(function ($re) use ($user_id, $receptionists_doctor_id) {
-                    $re->whereIN('appointment_with', $receptionists_doctor_id);
-                    $re->orWhereIN('booked_by', $receptionists_doctor_id);
-                    $re->orWhere('booked_by', $user_id);
+                   // $re->whereIN('appointment_with', $receptionists_doctor_id);
+                    //$re->orWhereIN('booked_by', $receptionists_doctor_id);
+                    //$re->orWhere('booked_by', $user_id);
                 })->where('status', 2)->orderBy('id', 'DESC')->paginate($this->limit);
 
             } else {
                 $Cancel_appointment = Appointment::with('doctor', 'patient')->where('status', 2)->orderBy('id', 'DESC')->paginate($this->limit);
             }
-            return view('appointment.cancel-appointment', compact('user', 'role', 'Cancel_appointment'));
+            return view('appointment.cancel-appointment', compact('doctors','clinics','user', 'role', 'Cancel_appointment'));
         } else {
             return view('error.403');
         }
@@ -928,6 +951,9 @@ class AppointmentController extends Controller
 
     public function today_appointment(User $patient)
     {
+        $doctors  = User::join('doctors', 'users.id', '=', 'doctors.user_id')
+            ->get(['users.*', 'doctors.*']);
+        $clinics=Clinic::query()->get();
         $user = Sentinel::getUser();
         if ($user->hasAccess('appointment.list')) {
             $user_id = Sentinel::getUser()->id;
@@ -946,15 +972,16 @@ class AppointmentController extends Controller
                 $Today_appointment = Appointment::with('doctor', 'patient', 'timeSlot')->where(['appointment_for' => $user_id])->whereDate('appointment_date', Carbon::today())->paginate($this->limit);
             } elseif ($role == 'receptionist') {
                 $receptionists_doctor_id = ReceptionListDoctor::where('reception_id', $user_id)->pluck('doctor_id');
-                $Today_appointment = Appointment::with('doctor', 'patient', 'timeSlot')->where(function ($re) use ($user_id, $receptionists_doctor_id) {
-                    $re->whereIN('appointment_with', $receptionists_doctor_id);
-                    $re->orWhereIN('booked_by', $receptionists_doctor_id);
-                    $re->orWhere('booked_by', $user_id);
+                $Today_appointment = Appointment::with('doctor', 'patient', 'timeSlot')
+                    ->where(function ($re) use ($user_id, $receptionists_doctor_id) {
+                    //$re->whereIN('appointment_with', $receptionists_doctor_id);
+                    //$re->orWhereIN('booked_by', $receptionists_doctor_id);
+                    //$re->orWhere('booked_by', $user_id);
                 })->whereDate('appointment_date', Carbon::today())->orderBy('id', 'DESC')->paginate($this->limit);
             } else {
                 $Today_appointment = Appointment::with('doctor', 'patient')->whereDate('appointment_date', Carbon::today())->orderBy('id', 'DESC')->paginate($this->limit);
             }
-            return view('appointment.today-appointment', compact('user', 'role', 'Today_appointment'));
+            return view('appointment.today-appointment', compact('doctors','clinics','user', 'role', 'Today_appointment'));
         } else {
             return view('error.403');
         }
@@ -962,12 +989,15 @@ class AppointmentController extends Controller
 
     public function patient_appointment()
     {
+        $doctors  = User::join('doctors', 'users.id', '=', 'doctors.user_id')
+            ->get(['users.*', 'doctors.*']);
+        $clinics=Clinic::query()->get();
         $user = Sentinel::getUser();
         if ($user->hasAccess('patient-appointment.list')) {
             $role = $user->roles[0]->slug;
             $user_id = Sentinel::getUser()->id;
             $appointment = Appointment::with('doctor', 'timeSlot')->where(['appointment_for' => $user_id])->orderBy('id', 'DESC')->paginate($this->limit);
-            return view('patient.patient-appointment', compact('appointment', 'user', 'role'));
+            return view('patient.patient-appointment', compact('doctors','clinics','appointment', 'user', 'role'));
         } else {
             return view('error.403');
         }

@@ -63,6 +63,7 @@
                                             <a href="{{ url('doctor/' . $doctor->id . '/edit') }}"
                                                 class="btn btn-primary waves-effect waves-light btn-sm">{{ __('Edit Profile') }}
                                                 <i class="mdi mdi-arrow-right ml-1"></i></a>
+
                                             <a href="{{ url('time-edit/' . $doctor->id) }}"
                                                 class="btn btn-primary waves-effect waves-light btn-sm">{{ __('Edit Time Slot') }}
                                                 <i class="mdi mdi-arrow-right ml-1"></i></a>
@@ -401,4 +402,41 @@
         <script src="{{ URL::asset('assets/libs/pdfmake/pdfmake.min.js') }}"></script>
         <!-- Init js-->
         <script src="{{ URL::asset('assets/js/pages/profile.init.js') }}"></script>
+        <script src="{{ URL::asset('assets/libs/jszip/jszip.min.js') }}"></script>
+        <script src="{{ URL::asset('assets/libs/pdfmake/pdfmake.min.js') }}"></script>
+        <!-- Init js-->
+        <script src="{{ URL::asset('assets/js/pages/notification.init.js') }}"></script>
+        <script>
+            // delete Coctor
+            $(document).on('click', '#delete-doctor', function() {
+                var id = $(this).data('id');
+                if (confirm('Are you sure want to delete doctor?')) {
+                    $.ajax({
+                        type: "DELETE",
+                        url: 'delete/' + id,
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            id:id,
+                        },
+                        beforeSend: function() {
+                            $('#pageloader').show()
+                        },
+                        success: function(response) {
+                            toastr.success(response.message, 'Success Alert', {
+                                timeOut: 2000
+                            });
+                            location.reload();
+                        },
+                        error: function(response) {
+                            toastr.error(response.responseJSON.message,{
+                                timeOut: 20000
+                            });
+                        },
+                        complete: function() {
+                            $('#pageloader').hide();
+                        }
+                    });
+                }
+            });
+        </script>
     @endsection

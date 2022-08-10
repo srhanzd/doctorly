@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Appointment;
+use App\Clinic;
 use App\Invoice;
 use App\ReceptionListDoctor;
 use Exception;
@@ -42,6 +43,9 @@ class ReceptionistController extends Controller
      */
     public function index()
     {
+        $doctors  = User::join('doctors', 'users.id', '=', 'doctors.user_id')
+            ->get(['users.*', 'doctors.*']);
+        $clinics=Clinic::query()->get();
         $user = Sentinel::getUser();
         $role = $user->roles[0]->slug;
         $receptionist_role = Sentinel::findRoleBySlug('receptionist');
@@ -50,7 +54,7 @@ class ReceptionistController extends Controller
             $receptionist_doctor = ReceptionListDoctor::where('doctor_id',$user->id)->pluck('reception_id');
             $receptionists = User::with('roles')->whereIn('id',$receptionist_doctor)->paginate($this->limit);
         }
-        return view('receptionist.receptionists', compact('user', 'role', 'receptionists'));
+        return view('receptionist.receptionists', compact('doctors','clinics','user', 'role', 'receptionists'));
     }
 
     /**
@@ -60,13 +64,16 @@ class ReceptionistController extends Controller
      */
     public function create()
     {
+        $doctors  = User::join('doctors', 'users.id', '=', 'doctors.user_id')
+            ->get(['users.*', 'doctors.*']);
+        $clinics=Clinic::query()->get();
         $user = Sentinel::getUser();
         if ($user->hasAccess('receptionist.create')) {
             $role = $user->roles[0]->slug;
             $receptionist = null;
             $doctor_role = Sentinel::findRoleBySlug('doctor');
             $doctors = $doctor_role->users()->with(['roles', 'doctor'])->where('is_deleted', 0)->get();
-            return view('receptionist.receptionist-details', compact('user', 'role', 'receptionist', 'doctors'));
+            return view('receptionist.receptionist-details', compact('doctors','clinics','user', 'role', 'receptionist', 'doctors'));
         } else {
             return view('error.403');
         }
@@ -134,6 +141,9 @@ class ReceptionistController extends Controller
      */
     public function show(User $receptionist)
     {
+        $doctors  = User::join('doctors', 'users.id', '=', 'doctors.user_id')
+            ->get(['users.*', 'doctors.*']);
+        $clinics=Clinic::query()->get();
         $user = Sentinel::getUser();
         if ($user->hasAccess('receptionist.view')) {
             $user_id = $receptionist->id;
@@ -174,7 +184,7 @@ class ReceptionistController extends Controller
                 $doctors = $doctor_role->users()->with(['roles', 'doctor'])->where('is_deleted', 0)->get();
                 $receptionist_doctor = ReceptionListDoctor::where('reception_id', $receptionist->id)->where('is_deleted', 0)->pluck('doctor_id');
                 $doctor_user = User::whereIn('id', $receptionist_doctor)->get();
-                return view('receptionist.receptionist-profile', compact('user', 'role', 'receptionist', 'data', 'appointments', 'invoices', 'doctor_user'));
+                return view('receptionist.receptionist-profile', compact('doctors','clinics','user', 'role', 'receptionist', 'data', 'appointments', 'invoices', 'doctor_user'));
             } else {
                 return redirect('/')->with('error', 'Receptionist not found');
             }
@@ -191,6 +201,9 @@ class ReceptionistController extends Controller
      */
     public function edit(User $receptionist)
     {
+        $doctors  = User::join('doctors', 'users.id', '=', 'doctors.user_id')
+            ->get(['users.*', 'doctors.*']);
+        $clinics=Clinic::query()->get();
         $user = Sentinel::getUser();
         $receptionist = $user::whereHas('roles',function($rq){
             $rq->where('slug','receptionist');
@@ -204,7 +217,7 @@ class ReceptionistController extends Controller
                 $doctors = $doctor_role->users()->with(['roles', 'doctor'])->where('is_deleted', 0)->get();
                 $receptionist_doctor = ReceptionListDoctor::where('reception_id', $receptionist->id)->where('is_deleted', 0)->pluck('doctor_id');
                 $doctor_user = User::whereIn('id', $receptionist_doctor)->pluck('id')->toArray();
-                return view('receptionist.receptionist-edit', compact('user', 'role', 'receptionist', 'doctors', 'doctor_user'));
+                return view('receptionist.receptionist-edit', compact('doctors','clinics','user', 'role', 'receptionist', 'doctors', 'doctor_user'));
             } else {
                 return view('error.403');
             }
@@ -342,6 +355,9 @@ class ReceptionistController extends Controller
         }
     }
     public function receptionist_view($id){
+        $doctors  = User::join('doctors', 'users.id', '=', 'doctors.user_id')
+            ->get(['users.*', 'doctors.*']);
+        $clinics=Clinic::query()->get();
         $user = Sentinel::getUser();
             $user_id = $id;
             $receptionist_doctor = ReceptionListDoctor::where('doctor_id',$user->id)->pluck('reception_id');
@@ -379,7 +395,7 @@ class ReceptionistController extends Controller
                 $doctors = $doctor_role->users()->with(['roles', 'doctor'])->where('is_deleted', 0)->get();
                 $receptionist_doctor = ReceptionListDoctor::where('reception_id', $receptionist->id)->where('is_deleted', 0)->pluck('doctor_id');
                 $doctor_user = User::whereIn('id', $receptionist_doctor)->get();
-                return view('receptionist.receptionist-profile', compact('user', 'role', 'receptionist', 'data', 'appointments', 'invoices', 'doctor_user'));
+                return view('receptionist.receptionist-profile', compact('doctors','clinics','user', 'role', 'receptionist', 'data', 'appointments', 'invoices', 'doctor_user'));
             } else {
                 return redirect('/')->with('error', 'receptionist not found');
             }

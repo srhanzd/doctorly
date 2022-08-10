@@ -72,7 +72,7 @@
             </div>
         </div>
         <div class="card">
-            <div class="card-body">
+            <div clas6s="card-body">
                 <h4 class="card-title mb-4">{{ __('Monthly Earning') }}</h4>
                 <div class="row">
                     <div class="col-sm-6">

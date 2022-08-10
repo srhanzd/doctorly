@@ -39,17 +39,18 @@ class HomeController extends Controller
         $role = $user->roles[0]->slug;
         $today = Carbon::today()->format('Y/m/d');
         $time = date('H:i:s');
-        //$doctor_role = Sentinel::findRoleBySlug('doctor');
-        $doctors1  = User::join('doctors', 'users.id', '=', 'doctors.user_id')->where('clinic_id', 1)
+        $doctor_role = Sentinel::findRoleBySlug('doctor');
+        //$doctors=Doctor::query()->get()->all();
+        $doctors  = User::join('doctors', 'users.id', '=', 'doctors.user_id')
             ->get(['users.*', 'doctors.*']);
-        $doctors2  = User::join('doctors', 'users.id', '=', 'doctors.user_id')->where('clinic_id', 2)
-            ->get(['users.*', 'doctors.*']);
-        $doctors3  = User::join('doctors', 'users.id', '=', 'doctors.user_id')->where('clinic_id', 3)
-            ->get(['users.*', 'doctors.*']);
-        $doctors4  = User::join('doctors', 'users.id', '=', 'doctors.user_id')->where('clinic_id', 4)
-            ->get(['users.*', 'doctors.*']);
-        $doctors5  = User::join('doctors', 'users.id', '=', 'doctors.user_id')->where('clinic_id', 5)
-            ->get(['users.*', 'doctors.*']);
+//        $doctors2  = User::join('doctors', 'users.id', '=', 'doctors.user_id')->where('clinic_id', 2)
+//            ->get(['users.*', 'doctors.*']);
+//        $doctors3  = User::join('doctors', 'users.id', '=', 'doctors.user_id')->where('clinic_id', 3)
+//            ->get(['users.*', 'doctors.*']);
+//        $doctors4  = User::join('doctors', 'users.id', '=', 'doctors.user_id')->where('clinic_id', 4)
+//            ->get(['users.*', 'doctors.*']);
+//        $doctors5  = User::join('doctors', 'users.id', '=', 'doctors.user_id')->where('clinic_id', 5)
+//            ->get(['users.*', 'doctors.*']);
 
 
         $clinics=Clinic::query()->get()->all();
@@ -95,8 +96,7 @@ class HomeController extends Controller
                 'monthly_earning' => $monthlyEarning['monthlyEarning'],
                 'monthly_diff' => $monthlyEarning['diff']
             ];
-            return view('index', compact('user', 'role', 'patients', 'doctors1','doctors2'
-                ,'doctors3','doctors4','doctors5','clinics', 'receptionists', 'data'));
+            return view('index', compact('user', 'role', 'patients', 'doctors','clinics', 'receptionists', 'data'));
         } elseif ($role == 'doctor') {
             $doctor_info = Doctor::where('user_id', '=', $user->id)->first();
             $appointments = Appointment::with('patient')
@@ -162,8 +162,7 @@ class HomeController extends Controller
                 'monthly_diff' => $monthlyEarning['diff']
             ];
             return view('index', compact('user',
-                'doctors1','doctors2'
-                ,'doctors3','doctors4','doctors5','clinics','role', 'doctor_info', 'appointments', 'data'));
+                'doctors','clinics','role', 'doctor_info', 'appointments', 'data'));
         } elseif ($role == 'receptionist') {
             $today = Carbon::today()->format('Y/m/d');
             $user_id = Sentinel::getUser();
@@ -233,8 +232,7 @@ class HomeController extends Controller
                 'monthly_diff' => $monthlyEarning['diff']
             ];
             return view('index', compact('user',
-                'doctors1','doctors2'
-                ,'doctors3','doctors4','doctors5','clinics','role', 'patients', 'doctors', 'appointments', 'data', 'Upcoming_appointment'));
+                'doctors','clinics','role', 'patients', 'doctors', 'appointments', 'data', 'Upcoming_appointment'));
         } elseif ($role == 'patient') {
             $appointments = Appointment::with('doctor', 'timeSlot')->where('appointment_for', $user_id)->orderBy('id', 'DESC')->limit(5)->get();
             $tot_appointment = Appointment::where('appointment_for', $user_id)->get();
@@ -271,8 +269,7 @@ class HomeController extends Controller
                 'monthly_diff' => $monthlyEarning['diff']
             ];
             return view('index', compact('user',
-                'doctors1','doctors2'
-                ,'doctors3','doctors4','doctors5','clinics','role', 'appointments', 'data'));
+                'doctors','clinics','role', 'appointments', 'data'));
         }
     }
 

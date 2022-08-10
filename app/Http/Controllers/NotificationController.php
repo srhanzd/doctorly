@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Clinic;
 use App\Notification;
+use App\User;
 use Carbon\Carbon;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 use Illuminate\Http\Request;
@@ -24,13 +26,16 @@ class NotificationController extends Controller
 
     public function index()
     {
+        $doctors  = User::join('doctors', 'users.id', '=', 'doctors.user_id')
+            ->get(['users.*', 'doctors.*']);
+        $clinics=Clinic::query()->get();
         $user = Sentinel::getUser();
         if ($user) {
             $role = $user->roles[0]->slug;
             $userId = $user->id;
             $notification = Notification::with(['user', 'appointment_user.patient', 'appointment_user.timeSlot', 'invoice_user.patient', 'user.roles'])
                 ->where('to_user', $userId)->orderBy('id', 'DESC')->paginate($this->limit);
-            return view('notification-list', compact('notification', 'user', 'role'));
+            return view('notification-list', compact('doctors','clinics','notification', 'user', 'role'));
         } else {
             return redirect('/')->with('error', 'Please Login');
         }
@@ -74,11 +79,14 @@ class NotificationController extends Controller
     }
     public function notification_top(Request $request)
     {
+        $doctors  = User::join('doctors', 'users.id', '=', 'doctors.user_id')
+            ->get(['users.*', 'doctors.*']);
+        $clinics=Clinic::query()->get();
         if ($request->ajax()) {
             $user = Sentinel::getUser();
             $user_id = $user->id;
             $notification_count = Notification::with(['user'])->where('to_user', $user_id)->where('read_at', '=', null)->take(10)->orderBy('id', 'desc')->get();
-            $data = view('layouts.ajax-notification', compact('notification_count'))->render();
+            $data = view('layouts.ajax-notification', compact('doctors','clinics','notification_count'))->render();
             return response()->json([
                 'isSuccess' => true,
                 'Message' => "Notification list!",

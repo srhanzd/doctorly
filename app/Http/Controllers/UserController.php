@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Appointment;
+use App\Clinic;
 use App\Doctor;
 use App\DoctorAvailableDay;
 use App\DoctorAvailableTime;
@@ -149,19 +150,22 @@ class UserController extends Controller
      */
     public function edit()
     {
+        $doctors  = User::join('doctors', 'users.id', '=', 'doctors.user_id')
+            ->get(['users.*', 'doctors.*']);
+        $clinics=Clinic::query()->get();
         $user = Sentinel::getUser();
         if ($user->hasAccess('profile.update')) {
             $userId = $user->id;
             $role = $user->roles[0]->slug;
             if ($role == 'admin') {
-                return view('admin.admin-edit', compact('user', 'role'));
+                return view('admin.admin-edit', compact('doctors','clinics','user', 'role'));
             } elseif ($role == 'doctor') {
                 $doctor = Sentinel::getUser();
                 $doctor_info = Doctor::where('user_id', '=', $doctor->id)->first();
                 if ($doctor_info) {
                     $availableDay = DoctorAvailableDay::where('doctor_id', $doctor->id)->first();
                     $availableTime = DoctorAvailableTime::where('doctor_id', $doctor->id)->get();
-                    return view('doctor.doctor-profile-edit', compact('user', 'role', 'doctor', 'doctor_info', 'availableDay', 'availableTime'));
+                    return view('doctor.doctor-profile-edit', compact('doctors','clinics','user', 'role', 'doctor', 'doctor_info', 'availableDay', 'availableTime'));
                 } else {
                     return redirect('/')->with('error', 'Doctor details not found');
                 }
@@ -172,13 +176,13 @@ class UserController extends Controller
                 $doctors = $doctor_role->users()->with(['roles', 'doctor'])->where('is_deleted', 0)->get();
                 $receptionist_doctor = ReceptionListDoctor::where('reception_id', $receptionist->id)->where('is_deleted', 0)->pluck('doctor_id');
                 $doctor_user = User::whereIn('id', $receptionist_doctor)->pluck('id')->toArray();
-                return view('receptionist.receptionist-profile-edit', compact('user', 'role', 'receptionist', 'doctors', 'doctor_user'));
+                return view('receptionist.receptionist-profile-edit', compact('doctors','clinics','user', 'role', 'receptionist', 'doctors', 'doctor_user'));
             } elseif ($role == 'patient') {
                 $patient = Sentinel::getUser();
                 $patient_info = Patient::where('user_id', '=', $patient->id)->first();
                 $medical_info = MedicalInfo::where('user_id', '=', $patient->id)->first();
                 // return $patient;
-                return view('patient.patient-edit', compact('user', 'role', 'patient', 'patient_info', 'medical_info'));
+                return view('patient.patient-edit', compact('doctors','clinics','user', 'role', 'patient', 'patient_info', 'medical_info'));
             }
         } else {
             return view('error.403');
@@ -488,6 +492,9 @@ class UserController extends Controller
     }
     public function profile_view()
     {
+        $doctors  = User::join('doctors', 'users.id', '=', 'doctors.user_id')
+            ->get(['users.*', 'doctors.*']);
+        $clinics=Clinic::query()->get();
         $user = Sentinel::getUser();
         $role = $user->roles[0]->slug;
         if ($role == 'patient') {
@@ -511,7 +518,7 @@ class UserController extends Controller
                     'revenue' => $revenue,
                     'pending_bill' => $pending_bill
                 ];
-                return view('patient.patient-profile-view', compact('user', 'role', 'patient', 'patient_info', 'medical_Info', 'data', 'appointments', 'prescriptions', 'invoices'));
+                return view('patient.patient-profile-view', compact('doctors','clinics','user', 'role', 'patient', 'patient_info', 'medical_Info', 'data', 'appointments', 'prescriptions', 'invoices'));
             } else {
                 return redirect('/')->with('error', 'Patient not found');
             }
@@ -547,7 +554,7 @@ class UserController extends Controller
                 ];
                 $availableDay = DoctorAvailableDay::where('doctor_id', $doctor->id)->first();
                 $availableTime = DoctorAvailableTime::where('doctor_id', $doctor->id)->where('is_deleted', 0)->get();
-                return view('doctor.doctor-profile-view', compact('user', 'role', 'doctor', 'doctor_info', 'data', 'appointments', 'availableTime', 'prescriptions', 'invoices', 'availableDay'));
+                return view('doctor.doctor-profile-view', compact('doctors','clinics','user', 'role', 'doctor', 'doctor_info', 'data', 'appointments', 'availableTime', 'prescriptions', 'invoices', 'availableDay'));
             } else {
                 return redirect('/')->with('error', 'Doctors details not found');
             }
@@ -594,7 +601,7 @@ class UserController extends Controller
             $doctors = $doctor_role->users()->with(['roles', 'doctor'])->where('is_deleted', 0)->get();
             $receptionist_doctor = ReceptionListDoctor::where('reception_id', $receptionist->id)->where('is_deleted', 0)->pluck('doctor_id');
             $doctor_user = User::whereIn('id', $receptionist_doctor)->get();
-            return view('receptionist.receptionist-profile-view', compact('user', 'role', 'receptionist', 'data', 'appointments', 'invoices', 'doctor_user'));
+            return view('receptionist.receptionist-profile-view', compact('doctors','clinics','user', 'role', 'receptionist', 'data', 'appointments', 'invoices', 'doctor_user'));
         } else {
             return redirect('/')->with('error', 'role not found');
         }

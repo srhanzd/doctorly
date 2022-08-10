@@ -48,14 +48,14 @@ class DoctorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function clinic(){
-        return 'h';
-    }
-    public function index($id)
+
+    public function index()
     {
        // $id=$item->id;
-        return $id;
-$clinics=Clinic::query()->get();
+
+        $doctors  = User::join('doctors', 'users.id', '=', 'doctors.user_id')
+            ->get(['users.*', 'doctors.*']);
+        $clinics=Clinic::query()->get();
         $user = Sentinel::getUser();
 
         if ($user->hasAccess('doctor.list')) {
@@ -66,12 +66,14 @@ $clinics=Clinic::query()->get();
             $doctor_role = Sentinel::findRoleBySlug('doctor');
             if ($role == 'receptionist') {
                 $prescriptions_doctor = ReceptionListDoctor::where('reception_id', $user_id)->pluck('doctor_id');
-                $doctors = User::whereIN('id', $prescriptions_doctor)->where('is_deleted', 0)->paginate($this->limit);
+//                $doctors = User::whereIN('id', $prescriptions_doctor)->where('is_deleted', 0)->paginate($this->limit);
+                $doctors = $doctor_role->users()->with(['roles', 'doctor'])
+                    ->where('is_deleted', 0)->orderByDesc('id')->paginate($this->limit);
             } else {
                 $doctors = $doctor_role->users()->with(['roles', 'doctor'])
                     ->where('is_deleted', 0)->orderByDesc('id')->paginate($this->limit);
             }
-            return view('doctor.doctors', compact('user', 'role', 'doctors','clinics'));
+            return view('doctor.doctors', compact('user', 'role', 'doctors','clinics','doctors'));
         } else {
             return view('error.403');
         }
@@ -83,13 +85,15 @@ $clinics=Clinic::query()->get();
      */
     public function create()
     {
-
+        $doctors  = User::join('doctors', 'users.id', '=', 'doctors.user_id')
+            ->get(['users.*', 'doctors.*']);
+        $clinics=Clinic::query()->get();
         $user = Sentinel::getUser();
         if ($user->hasAccess('doctor.create')) {
             $role = $user->roles[0]->slug;
             $doctor = null;
             $doctor_info = null;
-            return view('doctor.doctor-details', compact('user', 'role', 'doctor', 'doctor_info'));
+            return view('doctor.doctor-details', compact('doctors','clinics','user', 'role', 'doctor', 'doctor_info'));
         } else {
             return view('error.403');
         }
@@ -230,6 +234,10 @@ $clinics=Clinic::query()->get();
      */
     public function show(User $doctor)
     {
+        $doctors  = User::join('doctors', 'users.id', '=', 'doctors.user_id')
+            ->get(['users.*', 'doctors.*']);
+        $clinics=Clinic::query()->get();
+
         $user = Sentinel::getUser();
         if ($user->hasAccess('doctor.view')) {
             $doctor_id = $doctor->id;
@@ -262,7 +270,7 @@ $clinics=Clinic::query()->get();
                     ];
                     $availableDay = DoctorAvailableDay::where('doctor_id', $doctor->id)->first();
                     $availableTime = DoctorAvailableTime::where('doctor_id', $doctor->id)->where('is_deleted', 0)->get();
-                    return view('doctor.doctor-profile', compact('user', 'role', 'doctor', 'doctor_info', 'data', 'appointments', 'availableTime', 'prescriptions', 'invoices', 'availableDay'));
+                    return view('doctor.doctor-profile', compact('doctors','clinics','user', 'role', 'doctor', 'doctor_info', 'data', 'appointments', 'availableTime', 'prescriptions', 'invoices', 'availableDay'));
                 } else {
                     return redirect('/')->with('error', 'Doctors details not found');
                 }
@@ -281,6 +289,10 @@ $clinics=Clinic::query()->get();
      */
     public function edit(User $doctor)
     {
+        $doctors  = User::join('doctors', 'users.id', '=', 'doctors.user_id')
+            ->get(['users.*', 'doctors.*']);
+        $clinics=Clinic::query()->get();
+
         $user = Sentinel::getUser();
         $doctor_id = $doctor->id;
         $doctor = $user::whereHas('roles',function($rq){
@@ -293,7 +305,7 @@ $clinics=Clinic::query()->get();
                 if ($doctor_info) {
                     $availableDay = DoctorAvailableDay::where('doctor_id', $doctor->id)->first();
                     $availableTime = DoctorAvailableTime::where('doctor_id', $doctor->id)->get();
-                    return view('doctor.doctor-edit', compact('user', 'role', 'doctor', 'doctor_info', 'availableDay', 'availableTime'));
+                    return view('doctor.doctor-edit', compact('doctors','clinics','user', 'role', 'doctor', 'doctor_info', 'availableDay', 'availableTime'));
                 } else {
                     return redirect('/')->with('error', 'Doctor details not found');
                 }
@@ -404,6 +416,7 @@ $clinics=Clinic::query()->get();
      */
     public function destroy(Request $request)
     {
+
         $user = Sentinel::getUser();
         if ($user->hasAccess('doctor.delete')) {
             try {
@@ -441,6 +454,9 @@ $clinics=Clinic::query()->get();
 
     public function time_edit($id)
     {
+        $doctors  = User::join('doctors', 'users.id', '=', 'doctors.user_id')
+            ->get(['users.*', 'doctors.*']);
+        $clinics=Clinic::query()->get();
         $user = Sentinel::getUser();
         if ($user->hasAccess('doctor.time_edit')) {
             $role = $user->roles[0]->slug;
@@ -449,7 +465,7 @@ $clinics=Clinic::query()->get();
             if ($doctor_info) {
                 $availableDay = DoctorAvailableDay::where('doctor_id', $id)->first();
                 $availableTime = DoctorAvailableTime::where('doctor_id', $id)->get();
-                return view('doctor.doctor_time_edit', compact('user', 'role', 'doctor', 'doctor_info', 'availableDay', 'availableTime'));
+                return view('doctor.doctor_time_edit', compact('clinics','doctors','user', 'role', 'doctor', 'doctor_info', 'availableDay', 'availableTime'));
             } else {
                 return redirect('/')->with('error', 'Doctor details not found');
             }
@@ -531,6 +547,12 @@ $clinics=Clinic::query()->get();
     }
     public function doctor_view($id){
         {
+            $doctors  = User::join('doctors', 'users.id', '=', 'doctors.user_id')
+                ->get(['users.*', 'doctors.*']);
+            $clinics=Clinic::query()->get();
+            $clinics=Clinic::query()->get();
+            $doctors  = User::join('doctors', 'users.id', '=', 'doctors.user_id')
+                ->get(['users.*', 'doctors.*']);
             $user = Sentinel::getUser();
             if ($user->hasAccess('doctor.view')) {
                 $doctor_id = $id;
@@ -562,7 +584,7 @@ $clinics=Clinic::query()->get();
                         ];
                         $availableDay = DoctorAvailableDay::where('doctor_id', $doctor->id)->first();
                         $availableTime = DoctorAvailableTime::where('doctor_id', $doctor->id)->where('is_deleted', 0)->get();
-                        return view('doctor.doctor-profile', compact('user', 'role', 'doctor', 'doctor_info', 'data', 'appointments', 'availableTime', 'prescriptions', 'invoices', 'availableDay'));
+                        return view('doctor.doctor-profile', compact('clinics','doctors','user','clinics', 'role', 'doctor', 'doctor_info', 'data', 'appointments', 'availableTime', 'prescriptions', 'invoices', 'availableDay'));
                     } else {
                         return redirect('/')->with('error', 'Doctors details not found');
                     }

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Appointment;
+use App\Clinic;
 use App\Invoice;
 use App\Prescription;
+use App\User;
 use Illuminate\Http\Request;
 use App\Medicine;
 use App\TestReport;
@@ -42,6 +44,9 @@ class PrescriptionController extends Controller
      */
     public function index()
     {
+        $doctors  = User::join('doctors', 'users.id', '=', 'doctors.user_id')
+            ->get(['users.*', 'doctors.*']);
+        $clinics=Clinic::query()->get();
         $user = Sentinel::getUser();
         if ($user->hasAccess('prescription.list')) {
             $role = $user->roles[0]->slug;
@@ -52,7 +57,7 @@ class PrescriptionController extends Controller
             } else {
                 $prescriptions = Prescription::with('patient', 'doctor', 'appointment', 'appointment.timeSlot')->where('is_deleted', 0)->orderBy('id', 'desc')->paginate($this->limit);
             }
-            return view('prescription.prescriptions', compact('user', 'role', 'prescriptions'));
+            return view('prescription.prescriptions', compact('doctors','clinics','user', 'role', 'prescriptions'));
         } else {
             return view('error.403');
         }
@@ -65,12 +70,15 @@ class PrescriptionController extends Controller
      */
     public function create()
     {
+        $doctors  = User::join('doctors', 'users.id', '=', 'doctors.user_id')
+            ->get(['users.*', 'doctors.*']);
+        $clinics=Clinic::query()->get();
         $user = Sentinel::getUser();
         if ($user->hasAccess('prescription.create')) {
             $role = $user->roles[0]->slug;
             $patient_role = Sentinel::findRoleBySlug('patient');
             $patients = $patient_role->users()->with('roles')->get();
-            return view('prescription.prescription-details', compact('user', 'role', 'patients'));
+            return view('prescription.prescription-details', compact('doctors','clinics','user', 'role', 'patients'));
         } else {
             return view('error.403');
         }
@@ -138,6 +146,9 @@ class PrescriptionController extends Controller
      */
     public function show(Prescription $prescription)
     {
+        $doctors  = User::join('doctors', 'users.id', '=', 'doctors.user_id')
+            ->get(['users.*', 'doctors.*']);
+        $clinics=Clinic::query()->get();
         $user = Sentinel::getUser();
         if ($user->hasAccess('prescription.show')) {
             $role = $user->roles[0]->slug;
@@ -146,7 +157,7 @@ class PrescriptionController extends Controller
 
                 $medicines = Medicine::where('prescription_id', $prescription->id)->where('is_deleted', 0)->get();
                 $test_reports = TestReport::where('prescription_id', $prescription->id)->where('is_deleted', 0)->get();
-                return view('prescription.view-prescription', compact('user', 'role', 'prescription', 'medicines', 'test_reports', 'user_details'));
+                return view('prescription.view-prescription', compact('doctors','clinics','user', 'role', 'prescription', 'medicines', 'test_reports', 'user_details'));
             } else {
                 return redirect('/')->with('error', 'prescription not found');
             }
@@ -163,6 +174,9 @@ class PrescriptionController extends Controller
      */
     public function edit(Prescription $prescription)
     {
+        $doctors  = User::join('doctors', 'users.id', '=', 'doctors.user_id')
+            ->get(['users.*', 'doctors.*']);
+        $clinics=Clinic::query()->get();
         $user = Sentinel::getUser();
         if ($user->hasAccess('prescription.update')) {
             $role = $user->roles[0]->slug;
@@ -173,7 +187,7 @@ class PrescriptionController extends Controller
                 $appointment = Appointment::where('appointment_for', $prescription->patient->id)->where('is_deleted', 0)->get();
                 $medicines = Medicine::where('prescription_id', $prescription->id)->where('is_deleted', 0)->get();
                 $test_reports = TestReport::where('prescription_id', $prescription->id)->where('is_deleted', 0)->get();
-                return view('prescription.prescription-edit', compact('user', 'prescription', 'medicines', 'test_reports', 'role', 'patients', 'appointment'));
+                return view('prescription.prescription-edit', compact('doctors','clinics','user', 'prescription', 'medicines', 'test_reports', 'role', 'patients', 'appointment'));
             } else {
                 return redirect('/')->with('error', 'Prescription not found');
             }
@@ -283,6 +297,9 @@ class PrescriptionController extends Controller
     }
     public function prescription_list()
     {
+        $doctors  = User::join('doctors', 'users.id', '=', 'doctors.user_id')
+            ->get(['users.*', 'doctors.*']);
+        $clinics=Clinic::query()->get();
         $user = Sentinel::getUser();
         $role = $user->roles[0]->slug;
         // $prescriptions = Prescription::with(['doctor', 'appointment', 'appointment.timeSlot','appointment.invoice'])
@@ -304,10 +321,13 @@ class PrescriptionController extends Controller
             ->WhereIn('id',$prescriptions)->orderBy('id', 'desc')
             ->paginate($this->limit);
         // return $prescriptions_details;
-        return view('patient.patient-prescriptions', compact('user', 'role', 'prescriptions_details'));
+        return view('patient.patient-prescriptions', compact('doctors','clinics','user', 'role', 'prescriptions_details'));
     }
     public function prescription_view($id)
     {
+        $doctors  = User::join('doctors', 'users.id', '=', 'doctors.user_id')
+            ->get(['users.*', 'doctors.*']);
+        $clinics=Clinic::query()->get();
         $user = Sentinel::getUser();
         $role = $user->roles[0]->slug;
         $user_details = Prescription::with(['patient', 'appointment', 'appointment.doctor','appointment.invoice'])->where('patient_id', $user->id)
@@ -319,7 +339,7 @@ class PrescriptionController extends Controller
             if($user_details->appointment->invoice){
                 $medicines = Medicine::where('prescription_id', $id)->where('is_deleted', 0)->get();
                 $test_reports = TestReport::where('prescription_id', $id)->where('is_deleted', 0)->get();
-                return view('patient.patient-prescription-view', compact('user', 'role', 'medicines', 'test_reports', 'user_details'));
+                return view('patient.patient-prescription-view', compact('doctors','clinics','user', 'role', 'medicines', 'test_reports', 'user_details'));
             }
             else{
                 return redirect()->back()->with('error', 'Invoice details not found');

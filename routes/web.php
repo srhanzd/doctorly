@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ClinicController;
 use App\Http\Controllers\RazorpayPaymentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StripePaymentController;
@@ -14,9 +15,9 @@ use App\Http\Controllers\StripePaymentController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('doctor/{$id}', 'DoctorController@edit');
+
 Route::get('/', 'HomeController@index');
-Route::get('clinic/{$id}', 'DoctorController@clinic');
+Route::get('clinic/{$id}', 'ClinicController@clinic')->name('clinic.c');
 
 //////////////////////////////////////////////////////////////////
 // authentication routes
@@ -109,5 +110,7 @@ Route::get('paymentComplete', [StripePaymentController::class, 'payment_complete
 
 // Payment Api key add
 Route::resource('payment-key','PaymentApiController');
-
+//    Route::get('doctor/delete/{$id}',[ClinicController::class, 'destroy'])->name('doctor.delete');
+//    Route::delete('delete/{$id}', 'ClinicController@destroy')->name('doctor.delete');
+    Route::resource('doctor', 'DoctorController');
 });

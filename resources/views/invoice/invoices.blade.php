@@ -1,5 +1,5 @@
 @extends('layouts.master-layouts')
-@section('title') {{ __('List of Invoices') }} @endsection
+@section('title') {{ __('List of Services') }} @endsection
 @section('css')
     <style>
         #pageloader {
@@ -36,20 +36,20 @@
     @section('content')
         <!-- start page title -->
         @component('components.breadcrumb')
-            @slot('title') Invoice List @endslot
+            @slot('title') Service List @endslot
             @slot('li_1') Dashboard @endslot
-            @slot('li_2') Invoice @endslot
+            @slot('li_2') Service @endslot
         @endcomponent
         <!-- end page title -->
         <div class="row">
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        @if ($role != 'patient')
+                        @if ($role == 'admin')
                             <a href=" {{ route('invoice.create') }}">
                                 <button type="button" class="btn btn-primary waves-effect waves-light mb-4">
                                     <i class="bx bx-plus font-size-16 align-middle mr-2"></i>
-                                    {{ __('Create New Invoice') }}
+                                    {{ __('Create New Services') }}
                                 </button>
                             </a>
                         @endif
@@ -58,13 +58,16 @@
                             <thead>
                                 <tr>
                                     <th>{{ __('Sr. No') }}</th>
-                                    @if ($role != 'patient')
-                                        <th>{{ __('Patient Name') }}</th>
+{{--                                    @if ($role != 'patient')--}}
+{{--                                        <th>{{ __('Patient Name') }}</th>--}}
+{{--                                    @endif--}}
+                                    <th>{{ __('description') }}</th>
+                                    <th>{{ __('Price') }}</th>
+                                    <th>{{ __('Clinic') }}</th>
+                                    @if ($role == 'admin')
+                                    <th><th>{{ __('Option') }}</th></th>
                                     @endif
-                                    <th>{{ __('Appointment Date') }}</th>
-                                    <th>{{ __('Appointment Time') }}</th>
-                                    <th>{{ __('Status') }}</th>
-                                    <th>{{ __('Option') }}</th>
+
                                 </tr>
                             </thead>
                             <tbody>
@@ -77,58 +80,69 @@
                                         $per_page = Config::get('app.page_limit');
                                     @endphp
                                 @endif
-                                @php
-                                    $currentpage = $invoices->currentPage();
-                                @endphp
-                                @foreach ($invoices as $invoice)
+{{--                                @php--}}
+{{--                                    $currentpage = $invoices->currentPage();--}}
+{{--                                @endphp--}}
+                                @foreach ($services as $service)
                                     <tr>
-                                        <td>{{ $loop->index + 1 + $per_page * ($currentpage - 1) }}</td>
-                                        @if ($role != 'patient')
-                                            <td>{{ $invoice->user->first_name }} {{ $invoice->user->last_name }}</td>
-                                        @endif
-                                        <td>{{ $invoice->appointment->appointment_date }}</td>
-                                        <td>{{ $invoice->appointment->timeSlot->from . ' to ' . $invoice->appointment->timeSlot->to }}
-                                        </td>
-                                        <td>{{ $invoice->payment_status }}</td>
+{{--                                        <td>{{ $loop->index + 1 + $per_page * ($currentpage - 1) }}</td>--}}
+{{--                                        @if ($role != 'patient')--}}
+                                        <td> {{ $service->id }}</td>
+                                            <td> {{ $service->description }}</td>
+{{--                                        @endif--}}
+                                        <td>{{ $service->price }}</td>
+                                        @foreach($clinics as $item)
+                                            @if($service->clinic_id==$item->id)
+                                                <td>{{ $item->name }}
+                                                </td>
+                                            @endif
+
+                                        @endforeach
+
+{{--                                        <td>{{ $invoice->payment_status }}</td>--}}
+                                        @if ($role == 'admin')
                                         <td>
-                                            <a href="{{ url('invoice/' . $invoice->id) }}">
-                                                <button type="button"
-                                                    class="btn btn-primary btn-sm btn-rounded waves-effect waves-light"
-                                                    title="View Invoice">
-                                                    <i class="mdi mdi-eye"></i>
-                                                </button>
-                                            </a>
-                                            <a href="{{ url('invoice/' . $invoice->id . '/edit') }}">
+{{--                                            <a href="{{ url('invoice/' . $service->id) }}">--}}
+{{--                                                <button type="button"--}}
+{{--                                                    class="btn btn-primary btn-sm btn-rounded waves-effect waves-light"--}}
+{{--                                                    title="View Invoice">--}}
+{{--                                                    <i class="mdi mdi-eye"></i>--}}
+{{--                                                </button>--}}
+{{--                                            </a>--}}
+
+                                            <a href="{{ url('invoice/' . $service->id . '/edit') }}">
                                                 <button type="button"
                                                     class="btn btn-primary btn-sm btn-rounded waves-effect waves-light"
                                                     title="Update invoice">
                                                     <i class="mdi mdi-lead-pencil"></i>
                                                 </button>
                                             </a>
-                                            @if ($role != 'patient')
-                                                <a href="javascript:void(0)">
-                                                    <button type="button"
-                                                        class="btn btn-primary btn-sm btn-rounded waves-effect waves-light
-                                                                send-mail"
-                                                        title="Send Email" data-id="{{ $invoice->id }}">
-                                                        <i class="mdi mdi-email"></i>
-                                                    </button>
-                                                </a>
-                                            @endif
+
+{{--                                            @if ($role != 'patient')--}}
+{{--                                                <a href="javascript:void(0)">--}}
+{{--                                                    <button type="button"--}}
+{{--                                                        class="btn btn-primary btn-sm btn-rounded waves-effect waves-light--}}
+{{--                                                                send-mail"--}}
+{{--                                                        title="Send Email" data-id="{{ $service->id }}">--}}
+{{--                                                        <i class="mdi mdi-email"></i>--}}
+{{--                                                    </button>--}}
+{{--                                                </a>--}}
+{{--                                            @endif--}}
                                         </td>
+                                        @endif
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
-                        <div class="col-md-12 text-center mt-3">
-                            <div class="d-flex justify-content-start">
-                                Showing {{ $invoices->firstItem() }} to {{ $invoices->lastItem() }} of
-                                {{ $invoices->total() }} entries
-                            </div>
-                            <div class="d-flex justify-content-end">
-                                {{ $invoices->links() }}
-                            </div>
-                        </div>
+{{--                        <div class="col-md-12 text-center mt-3">--}}
+{{--                            <div class="d-flex justify-content-start">--}}
+{{--                                Showing {{ $service->firstItem() }} to {{ $service->lastItem() }} of--}}
+{{--                                {{ $service->total() }} entries--}}
+{{--                            </div>--}}
+{{--                            <div class="d-flex justify-content-end">--}}
+{{--                                {{ $service->links() }}--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
                     </div>
                 </div>
             </div> <!-- end col -->

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Clinic;
 use App\Invoice;
 use App\PaymentApi;
 use App\Transaction;
+use App\User;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -16,6 +18,9 @@ class RazorpayPaymentController extends Controller
     //}
 
     public function store(Request $request , $id){
+        $doctors  = User::join('doctors', 'users.id', '=', 'doctors.user_id')
+            ->get(['users.*', 'doctors.*']);
+        $clinics=Clinic::query()->get();
         $user = Sentinel::getUser();
         $email = $user->email;
         $invoice = Invoice::with('invoice_detail')->where('id', $id)->first();
@@ -45,7 +50,7 @@ class RazorpayPaymentController extends Controller
                 'name' => 'Doctorly Invoice',
                 'currency' => 'USD',
             ];
-            return view('payment.razorpayView',compact('response'));
+            return view('payment.razorpayView',compact('doctors','clinics','response'));
         }
         else{
             return redirect('/')->with('error','Razorpay key not available! Please contact admin');

@@ -11,6 +11,18 @@
                     </li>
                     <?php if($role == 'admin'): ?>
                         <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-layout" role="button"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="bx bx-user-circle mr-2"></i><?php echo e(('Doctors')); ?> <div class="arrow-down">
+                                </div>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="topnav-layout">
+                                <a href="<?php echo e(url('doctor')); ?>" class="dropdown-item"><?php echo e(('List of Doctors')); ?></a>
+                                <a href="<?php echo e(route('doctor.create')); ?>"
+                                   class="dropdown-item"><?php echo e(__('Add New Doctor')); ?></a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
 
                             <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-layout" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -20,21 +32,31 @@
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-right">
+                                <?php $__currentLoopData = $clinics; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <div class="dropdown">
+                                    <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton"
+                                            data-mdb-toggle="dropdown" aria-expanded="false">
+                                        <?php echo e($item->name); ?>
 
-                                    <div class="dropdown">
-                                        <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton"
-                                                data-mdb-toggle="dropdown" aria-expanded="false">
-                                            <?php echo e($clinics[0]->name); ?>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                       <?php $__currentLoopData = $doctors; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item1): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                           <?php if($item1->clinic_id==$item->id): ?>
 
-                                        </button>
-                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                            <li><a class="dropdown-item" href="doctor/<?php echo e($clinincs[0]->id); ?>">Action</a></li>
                                             <li>
-                                                <a class="dropdown-item" href="#">Another action</a>
-                                            </li>
-                                        </ul>
 
-                                    </div>
+                                                <a class="dropdown-item" href="<?php echo e(url('/doctor/'.$item1->user_id)); ?>">
+                                                    <?php echo e($item1->first_name); ?> </a></li>
+                                            <li>
+                                            </li>
+                                            <?php endif; ?>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+                                    </ul>
+
+                                </div>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
 
 
 
@@ -77,11 +99,23 @@
 
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?php echo e(url('transaction')); ?>">
-                                <i class='bx bx-list-check mr-2'></i><?php echo e(__('Transaction')); ?>
 
+
+
+
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-layout" role="button"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="bx bx-receipt mr-2"></i><?php echo e(__('Services')); ?><div class="arrow-down">
+                                </div>
                             </a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="topnav-layout">
+                                <a href="<?php echo e(url('invoice')); ?>"
+                                   class="dropdown-item"><?php echo e(__('List of Services')); ?></a>
+                                <a href="<?php echo e(route('invoice.create')); ?>"
+                                   class="dropdown-item"><?php echo e(__('Create New Service')); ?></a>
+                            </div>
                         </li>
                     <?php elseif($role == 'doctor'): ?>
                         <li class="nav-item">
@@ -124,15 +158,15 @@
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-layout" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="bx bx-receipt mr-2"></i><?php echo e(__('Invoices')); ?> <div class="arrow-down">
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="bx bx-receipt mr-2"></i><?php echo e(__('Services')); ?><div class="arrow-down">
                                 </div>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="topnav-layout">
                                 <a href="<?php echo e(url('invoice')); ?>"
-                                    class="dropdown-item"><?php echo e(__('List of Invoices')); ?></a>
-                                <a href="<?php echo e(route('invoice.create')); ?>"
-                                    class="dropdown-item"><?php echo e(__('Create New Invoice')); ?></a>
+                                   class="dropdown-item"><?php echo e(__('List of Services')); ?></a>
+
+
                             </div>
                         </li>
                         <li class="nav-item">
@@ -148,11 +182,59 @@
 
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?php echo e(url('doctor')); ?>">
-                                <i class="bx bx-user-circle mr-2"></i><?php echo e(__('Doctors')); ?>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-layout" role="button"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="bx bx-user-circle mr-2"></i><?php echo e(('Doctors')); ?> <div class="arrow-down">
+                                </div>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="topnav-layout">
+                                <a href="<?php echo e(url('doctor')); ?>" class="dropdown-item"><?php echo e(('List of Doctors')); ?></a>
+
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+
+                            <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-layout" role="button"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="bx bx-user-circle mr-2"></i><?php echo e(__('Clinics')); ?> <div class="arrow-down">
+                                </div>
 
                             </a>
+
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <?php $__currentLoopData = $clinics; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <div class="dropdown">
+                                        <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton"
+                                                data-mdb-toggle="dropdown" aria-expanded="false">
+                                            <?php echo e($item->name); ?>
+
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            <?php $__currentLoopData = $doctors; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item1): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <?php if($item1->clinic_id==$item->id): ?>
+
+                                                    <li>
+
+                                                        <?php echo e($item1->first_name); ?></li>
+                                                    <li>
+                                                    </li>
+                                                <?php endif; ?>
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+                                        </ul>
+
+                                    </div>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+
+
+
+
+
+                                
+                                
+                            </div>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-layout" role="button"
@@ -176,14 +258,14 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-layout" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="bx bx-receipt mr-2"></i><?php echo e(__('Invoices')); ?><div class="arrow-down">
+                                <i class="bx bx-receipt mr-2"></i><?php echo e(__('Services')); ?><div class="arrow-down">
                                 </div>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="topnav-layout">
                                 <a href="<?php echo e(url('invoice')); ?>"
-                                    class="dropdown-item"><?php echo e(__('List of Invoices')); ?></a>
-                                <a href="<?php echo e(route('invoice.create')); ?>"
-                                    class="dropdown-item"><?php echo e(__('Create New Invoice')); ?></a>
+                                    class="dropdown-item"><?php echo e(__('List of Services')); ?></a>
+
+
                             </div>
                         </li>
                         <li class="nav-item">
@@ -199,11 +281,60 @@
 
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?php echo e(url('doctor')); ?>">
-                                <i class="bx bx-user-circle mr-2"></i><?php echo e(__('Doctors')); ?>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-layout" role="button"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="bx bx-user-circle mr-2"></i><?php echo e(('Doctors')); ?> <div class="arrow-down">
+                                </div>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="topnav-layout">
+                                <a href="<?php echo e(url('doctor')); ?>" class="dropdown-item"><?php echo e(('List of Doctors')); ?></a>
+                                <a href="<?php echo e(route('doctor.create')); ?>"
+                                   class="dropdown-item"><?php echo e(__('Add New Doctor')); ?></a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+
+                            <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-layout" role="button"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="bx bx-user-circle mr-2"></i><?php echo e(__('Clinics')); ?> <div class="arrow-down">
+                                </div>
 
                             </a>
+
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <?php $__currentLoopData = $clinics; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <div class="dropdown">
+                                        <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton"
+                                                data-mdb-toggle="dropdown" aria-expanded="false">
+                                            <?php echo e($item->name); ?>
+
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            <?php $__currentLoopData = $doctors; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item1): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <?php if($item1->clinic_id==$item->id): ?>
+
+                                                    <li>
+
+                                                        <?php echo e($item1->first_name); ?></li>
+                                                    <li>
+                                                    </li>
+                                                <?php endif; ?>
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+                                        </ul>
+
+                                    </div>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+
+
+
+
+
+                                
+                                
+                            </div>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="<?php echo e(url('prescription-list')); ?>">
@@ -212,8 +343,8 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="<?php echo e(url('invoice-list')); ?>">
-                                <i class="bx bx-receipt mr-2"></i><?php echo e(__('Invoices')); ?>
+                            <a class="nav-link" href="<?php echo e(url('invoice')); ?>">
+                                <i class="bx bx-receipt mr-2"></i><?php echo e(__('services')); ?>
 
                             </a>
                         </li>
