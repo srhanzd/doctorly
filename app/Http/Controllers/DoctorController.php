@@ -130,7 +130,7 @@ class DoctorController extends Controller
                     'sun' => 'required_without_all:wen,tue,mon,thu,fri,sat',
                     'TimeSlot.*.from' => 'required',
                     'TimeSlot.*.to' => 'required',
-                    'profile_photo' => 'image|mimes:jpg,png,jpeg,gif,svg|max:500'
+                   // 'profile_photo' => 'image|mimes:jpg,png,jpeg,gif,svg|max:500'
                 ],
             );
 
@@ -343,7 +343,7 @@ class DoctorController extends Controller
                 'fri' => 'required_without_all:wen,tue,mon,thu,sat,sun',
                 'sat' => 'required_without_all:wen,tue,mon,thu,fri,sun',
                 'sun' => 'required_without_all:wen,tue,mon,thu,fri,sat',
-                'profile_photo' =>'image|mimes:jpg,png,jpeg,gif,svg|max:500'
+                //'profile_photo' =>'image|mimes:jpg,png,jpeg,gif,svg|max:500'
             ]);
             try {
                 $user = Sentinel::getUser();

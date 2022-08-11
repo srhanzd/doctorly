@@ -360,19 +360,19 @@ class AppointmentController extends Controller
                             $notification->from_user = $userId;
                             $notification->save();
                         }
-                        $receptionists_doctor_mail = ReceptionListDoctor::where('doctor_id', $appointment->appointment_with)->pluck('reception_id');
-                        $reception_email = User::whereIN('id', $receptionists_doctor_mail)->pluck('email');
-                        $patient_email = User::where('id',$patient_id)->pluck('email');
-                        $admin_email = $admin_role->users()->with('roles')->pluck('email');
-                        $mailSend = collect();
-                        $mailSend->push($reception_email);
-                        $mailSend->push($patient_email);
-                        $mailSend->push($admin_email);
-                        $mailSend = $mailSend->flatten();
-                        $mailArray = $mailSend->toarray();
-                        Mail::send('emails.appointment_cancel', ['MailAppointment' => $MailAppointment, 'email' => $verify_mail,'CancelBy'=>$CancelBy], function ($message) use ($mailArray, $app_name) {
-                            $message->to($mailArray)->subject($app_name . ' ' . 'Appointment cancel');
-                        });
+//                        $receptionists_doctor_mail = ReceptionListDoctor::where('doctor_id', $appointment->appointment_with)->pluck('reception_id');
+//                        $reception_email = User::whereIN('id', $receptionists_doctor_mail)->pluck('email');
+//                        $patient_email = User::where('id',$patient_id)->pluck('email');
+//                        $admin_email = $admin_role->users()->with('roles')->pluck('email');
+//                        $mailSend = collect();
+//                        $mailSend->push($reception_email);
+//                        $mailSend->push($patient_email);
+//                        $mailSend->push($admin_email);
+//                        $mailSend = $mailSend->flatten();
+//                        $mailArray = $mailSend->toarray();
+//                        Mail::send('emails.appointment_cancel', ['MailAppointment' => $MailAppointment, 'email' => $verify_mail,'CancelBy'=>$CancelBy], function ($message) use ($mailArray, $app_name) {
+//                            $message->to($mailArray)->subject($app_name . ' ' . 'Appointment cancel');
+//                        });
 
                     } elseif ($role == 'patient') {
                         $doctor_id = $appointment->appointment_with;
@@ -393,19 +393,19 @@ class AppointmentController extends Controller
                             $notification->from_user = $userId;
                             $notification->save();
                         }
-                        $receptionists_doctor_mail = ReceptionListDoctor::where('doctor_id', $appointment->appointment_with)->pluck('reception_id');
-                        $receptionists_email = User::whereIN('id', $receptionists_doctor_mail)->pluck('email');
-                        $admin_email = $admin_role->users()->with('roles')->pluck('email');
-                        $receptionists_doctor_email = User::where('id', $doctor_id)->pluck('email');
-                        $mailSend = collect();
-                        $mailSend->push($receptionists_email);
-                        $mailSend->push($receptionists_doctor_email);
-                        $mailSend->push($admin_email);
-                        $mailSend = $mailSend->flatten();
-                        $mailArray = $mailSend->toarray();
-                        Mail::send('emails.appointment_cancel', ['MailAppointment' => $MailAppointment, 'email' => $verify_mail,'CancelBy'=>$CancelBy], function ($message) use ($mailArray, $app_name) {
-                            $message->to($mailArray)->subject($app_name . ' ' . 'Appointment cancel');
-                        });
+//                        $receptionists_doctor_mail = ReceptionListDoctor::where('doctor_id', $appointment->appointment_with)->pluck('reception_id');
+//                        $receptionists_email = User::whereIN('id', $receptionists_doctor_mail)->pluck('email');
+//                        $admin_email = $admin_role->users()->with('roles')->pluck('email');
+//                        $receptionists_doctor_email = User::where('id', $doctor_id)->pluck('email');
+//                        $mailSend = collect();
+//                        $mailSend->push($receptionists_email);
+//                        $mailSend->push($receptionists_doctor_email);
+//                        $mailSend->push($admin_email);
+//                        $mailSend = $mailSend->flatten();
+//                        $mailArray = $mailSend->toarray();
+//                        Mail::send('emails.appointment_cancel', ['MailAppointment' => $MailAppointment, 'email' => $verify_mail,'CancelBy'=>$CancelBy], function ($message) use ($mailArray, $app_name) {
+//                            $message->to($mailArray)->subject($app_name . ' ' . 'Appointment cancel');
+//                        });
                     } elseif ($role == 'admin') {
                         $patient_id = $appointment->appointment_for;
                         $doctor_id = $appointment->appointment_with;
@@ -424,22 +424,22 @@ class AppointmentController extends Controller
                             $notification->from_user = $userId;
                             $notification->save();
                         }
-                        $receptionists_doctor_mail = ReceptionListDoctor::where('doctor_id', $appointment->appointment_with)->pluck('reception_id');
-                        $receptionists_email = User::whereIN('id', $receptionists_doctor_mail)->pluck('email');
-                        $admin_role = Sentinel::findRoleBySlug('admin');
-                        $admin_email = $admin_role->users()->with('roles')->pluck('email');
-                        $receptionists_doctor_email = User::where('id', $doctor_id)->pluck('email');
-                        $receptionists_patient_email = User::where('id', $patient_id)->pluck('email');
-                        $mailSend = collect();
-                        $mailSend->push($receptionists_email);
-                        $mailSend->push($receptionists_doctor_email);
-                        $mailSend->push($admin_email);
-                        $mailSend->push($receptionists_patient_email);
-                        $mailSend = $mailSend->flatten();
-                        $mailArray = $mailSend->toarray();
-                        Mail::send('emails.appointment_cancel', ['MailAppointment' => $MailAppointment, 'email' => $verify_mail,'CancelBy'=>$CancelBy], function ($message) use ($mailArray, $app_name) {
-                            $message->to($mailArray)->subject($app_name . ' ' . 'Appointment cancel');
-                        });
+//                        $receptionists_doctor_mail = ReceptionListDoctor::where('doctor_id', $appointment->appointment_with)->pluck('reception_id');
+//                        $receptionists_email = User::whereIN('id', $receptionists_doctor_mail)->pluck('email');
+//                        $admin_role = Sentinel::findRoleBySlug('admin');
+//                        $admin_email = $admin_role->users()->with('roles')->pluck('email');
+//                        $receptionists_doctor_email = User::where('id', $doctor_id)->pluck('email');
+//                        $receptionists_patient_email = User::where('id', $patient_id)->pluck('email');
+//                        $mailSend = collect();
+//                        $mailSend->push($receptionists_email);
+//                        $mailSend->push($receptionists_doctor_email);
+//                        $mailSend->push($admin_email);
+//                        $mailSend->push($receptionists_patient_email);
+//                        $mailSend = $mailSend->flatten();
+//                        $mailArray = $mailSend->toarray();
+//                        Mail::send('emails.appointment_cancel', ['MailAppointment' => $MailAppointment, 'email' => $verify_mail,'CancelBy'=>$CancelBy], function ($message) use ($mailArray, $app_name) {
+//                            $message->to($mailArray)->subject($app_name . ' ' . 'Appointment cancel');
+//                        });
 
                     } elseif ($role == 'receptionist') {
                         $doctor_id = $appointment->appointment_with;
@@ -460,18 +460,18 @@ class AppointmentController extends Controller
                             $notification->from_user = $userId;
                             $notification->save();
                         }
-                        $admin_email = $admin_role->users()->with('roles')->pluck('email');
-                        $receptionists_doctor_email = User::where('id', $doctor_id)->pluck('email');
-                        $receptionists_patient_email = User::where('id', $patient_id)->pluck('email');
-                        $mailSend = collect();
-                        $mailSend->push($receptionists_patient_email);
-                        $mailSend->push($receptionists_doctor_email);
-                        $mailSend->push($admin_email);
-                        $mailSend = $mailSend->flatten();
-                        $mailArray = $mailSend->toarray();
-                        Mail::send('emails.appointment_cancel', ['MailAppointment' => $MailAppointment, 'email' => $verify_mail,'CancelBy'=>$CancelBy], function ($message) use ($mailArray, $app_name) {
-                            $message->to($mailArray)->subject($app_name . ' ' . 'Appointment cancel');
-                        });
+//                        $admin_email = $admin_role->users()->with('roles')->pluck('email');
+//                        $receptionists_doctor_email = User::where('id', $doctor_id)->pluck('email');
+//                        $receptionists_patient_email = User::where('id', $patient_id)->pluck('email');
+//                        $mailSend = collect();
+//                        $mailSend->push($receptionists_patient_email);
+//                        $mailSend->push($receptionists_doctor_email);
+//                        $mailSend->push($admin_email);
+//                        $mailSend = $mailSend->flatten();
+//                        $mailArray = $mailSend->toarray();
+//                        Mail::send('emails.appointment_cancel', ['MailAppointment' => $MailAppointment, 'email' => $verify_mail,'CancelBy'=>$CancelBy], function ($message) use ($mailArray, $app_name) {
+//                            $message->to($mailArray)->subject($app_name . ' ' . 'Appointment cancel');
+//                        });
                     }
                     return response()->json([
                         'isSuccess' => true,
@@ -618,19 +618,19 @@ class AppointmentController extends Controller
                             $notification->from_user = $userId;
                             $notification->save();
                         }
-                        $receptionists_doctor_mail = ReceptionListDoctor::where('doctor_id', $appointment->appointment_with)->pluck('reception_id');
-                        $receptionists_email = User::whereIN('id', $receptionists_doctor_mail)->pluck('email');
-                        $admin_email = $admin_role->users()->with('roles')->pluck('email');
-                        $receptionists_doctor_email = User::where('id', $doctor_id)->pluck('email');
-                        $mailSend = collect();
-                        $mailSend->push($receptionists_email);
-                        $mailSend->push($receptionists_doctor_email);
-                        $mailSend->push($admin_email);
-                        $mailSend = $mailSend->flatten();
-                        $mailArray = $mailSend->toarray();
-                        Mail::send('emails.appointment_create', ['MailAppointment' => $MailAppointment, 'email' => $verify_mail], function ($message) use ($mailArray, $app_name) {
-                            $message->to($mailArray)->subject($app_name . ' ' . 'New appointment generated');
-                        });
+//                        $receptionists_doctor_mail = ReceptionListDoctor::where('doctor_id', $appointment->appointment_with)->pluck('reception_id');
+//                        $receptionists_email = User::whereIN('id', $receptionists_doctor_mail)->pluck('email');
+//                        $admin_email = $admin_role->users()->with('roles')->pluck('email');
+//                        $receptionists_doctor_email = User::where('id', $doctor_id)->pluck('email');
+//                        $mailSend = collect();
+//                        $mailSend->push($receptionists_email);
+//                        $mailSend->push($receptionists_doctor_email);
+//                        $mailSend->push($admin_email);
+//                        $mailSend = $mailSend->flatten();
+//                        $mailArray = $mailSend->toarray();
+//                        Mail::send('emails.appointment_create', ['MailAppointment' => $MailAppointment, 'email' => $verify_mail], function ($message) use ($mailArray, $app_name) {
+//                            $message->to($mailArray)->subject($app_name . ' ' . 'New appointment generated');
+//                        });
                     } elseif ($role == 'receptionist') {
                         $admin_role = Sentinel::findRoleBySlug('admin');
                         $admin_id = $admin_role->users()->with('roles')->pluck('id');
@@ -650,19 +650,19 @@ class AppointmentController extends Controller
                             $notification->from_user = $userId;
                             $notification->save();
                         }
-                        $admin_email = $admin_role->users()->with('roles')->pluck('email');
-                        $receptionists_doctor_email = User::where('id', $doctor_id)->pluck('email');
-                        $receptionists_patient_email = User::where('id', $patient_id)->pluck('email');
-                        // return $receptionists_patient_email;
-                        $mailSend = collect();
-                        $mailSend->push($receptionists_patient_email);
-                        $mailSend->push($receptionists_doctor_email);
-                        $mailSend->push($admin_email);
-                        $mailSend = $mailSend->flatten();
-                        $mailArray = $mailSend->toarray();
-                        Mail::send('emails.appointment_create', ['MailAppointment' => $MailAppointment, 'email' => $verify_mail], function ($message) use ($mailArray, $app_name) {
-                            $message->to($mailArray)->subject($app_name . ' ' . 'New appointment generated');
-                        });
+//                        $admin_email = $admin_role->users()->with('roles')->pluck('email');
+//                        $receptionists_doctor_email = User::where('id', $doctor_id)->pluck('email');
+//                        $receptionists_patient_email = User::where('id', $patient_id)->pluck('email');
+//                        // return $receptionists_patient_email;
+//                        $mailSend = collect();
+//                        $mailSend->push($receptionists_patient_email);
+//                        $mailSend->push($receptionists_doctor_email);
+//                        $mailSend->push($admin_email);
+//                        $mailSend = $mailSend->flatten();
+//                        $mailArray = $mailSend->toarray();
+//                        Mail::send('emails.appointment_create', ['MailAppointment' => $MailAppointment, 'email' => $verify_mail], function ($message) use ($mailArray, $app_name) {
+//                            $message->to($mailArray)->subject($app_name . ' ' . 'New appointment generated');
+//                        });
 
                     } elseif ($role == 'doctor') {
                         $receptionists_doctor_id = ReceptionListDoctor::where('doctor_id', $appointment->appointment_with)->pluck('reception_id');
@@ -683,19 +683,19 @@ class AppointmentController extends Controller
                             $notification->from_user = $userId;
                             $notification->save();
                         }
-                        $receptionists_doctor_mail = ReceptionListDoctor::where('doctor_id', $appointment->appointment_with)->pluck('reception_id');
-                        $reception_email = User::whereIN('id', $receptionists_doctor_mail)->pluck('email');
-                        $patient_email = User::where('id',$patient_id)->pluck('email');
-                        $admin_email = $admin_role->users()->with('roles')->pluck('email');
-                        $this->mailSend = collect();
-                        $this->mailSend->push($reception_email);
-                        $this->mailSend->push($patient_email);
-                        $this->mailSend->push($admin_email);
-                        $this->mailSend = $this->mailSend->flatten();
-                        $mailArray = $this->mailSend->toarray();
-                        Mail::send('emails.appointment_create', ['MailAppointment' => $MailAppointment, 'email' => $verify_mail], function ($message) use ($mailArray, $app_name) {
-                            $message->to($mailArray)->subject($app_name . ' ' . 'New appointment generated');
-                        });
+//                        $receptionists_doctor_mail = ReceptionListDoctor::where('doctor_id', $appointment->appointment_with)->pluck('reception_id');
+//                        $reception_email = User::whereIN('id', $receptionists_doctor_mail)->pluck('email');
+//                        $patient_email = User::where('id',$patient_id)->pluck('email');
+//                        $admin_email = $admin_role->users()->with('roles')->pluck('email');
+//                        $this->mailSend = collect();
+//                        $this->mailSend->push($reception_email);
+//                        $this->mailSend->push($patient_email);
+//                        $this->mailSend->push($admin_email);
+//                        $this->mailSend = $this->mailSend->flatten();
+//                        $mailArray = $this->mailSend->toarray();
+//                        Mail::send('emails.appointment_create', ['MailAppointment' => $MailAppointment, 'email' => $verify_mail], function ($message) use ($mailArray, $app_name) {
+//                            $message->to($mailArray)->subject($app_name . ' ' . 'New appointment generated');
+//                        });
                     }
                 }
             } catch (Exception $e) {

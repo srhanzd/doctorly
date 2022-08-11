@@ -64,7 +64,7 @@
                                     <th>{{ __('description') }}</th>
                                     <th>{{ __('Price') }}</th>
                                     <th>{{ __('Clinic') }}</th>
-                                    @if ($role != 'patient'&&$role!='doctor')
+                                    @if ($role != 'patient'&&$role!='doctor'&&$role!='receptionist')
                                     <th>{{ __('Option') }}</th>
                                     @endif
 
@@ -100,7 +100,7 @@
                                         @endforeach
 
 {{--                                        <td>{{ $invoice->payment_status }}</td>--}}
-                                        @if ($role != 'patient'&&$role!='doctor')
+                                        @if ($role != 'patient'&&$role!='doctor'&&$role!='receptionist')
                                         <td>
 {{--                                            <a href="{{ url('invoice/' . $service->id) }}">--}}
 {{--                                                <button type="button"--}}

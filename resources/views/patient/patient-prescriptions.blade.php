@@ -12,9 +12,9 @@
             @slot('li_2') Prescription @endslot
         @endcomponent
         <!-- end page title -->
-        <div class="alert alert-warning" role="alert">
-            You can not saw prescription without  invoice payment
-        </div>
+{{--        <div class="alert alert-warning" role="alert">--}}
+{{--            You can not saw prescription without  invoice payment--}}
+{{--        </div>--}}
         <div class="row">
             <div class="col-12">
                 <div class="card">

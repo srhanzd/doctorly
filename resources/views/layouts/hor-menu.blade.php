@@ -73,8 +73,8 @@
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="topnav-layout">
                                 <a href="{{ url('patient') }}"
                                     class="dropdown-item">{{ __('List of Patients') }}</a>
-                                <a href="{{ route('patient.create') }}"
-                                    class="dropdown-item">{{ __('Add New Patient') }}</a>
+{{--                                <a href="{{ route('patient.create') }}"--}}
+{{--                                    class="dropdown-item">{{ __('Add New Patient') }}</a>--}}
                             </div>
 
                         </li>
@@ -129,8 +129,8 @@
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="topnav-layout">
                                 <a href="{{ url('patient') }}"
                                     class="dropdown-item">{{ __('List of Patients') }}</a>
-                                <a href="{{ route('patient.create') }}"
-                                    class="dropdown-item">{{ __('Add New Patient') }}</a>
+{{--                                <a href="{{ route('patient.create') }}"--}}
+{{--                                    class="dropdown-item">{{ __('Add New Patient') }}</a>--}}
                             </div>
                         </li>
                         <li class="nav-item dropdown">
@@ -237,8 +237,8 @@
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="topnav-layout">
                                 <a href="{{ url('patient') }}"
                                     class="dropdown-item">{{ __('List of Patients') }}</a>
-                                <a href="{{ route('patient.create') }}"
-                                    class="dropdown-item">{{ __('Add New Patient') }}</a>
+{{--                                <a href="{{ route('patient.create') }}"--}}
+{{--                                    class="dropdown-item">{{ __('Add New Patient') }}</a>--}}
                             </div>
                         </li>
                         <li class="nav-item">

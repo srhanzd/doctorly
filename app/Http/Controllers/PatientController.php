@@ -113,7 +113,7 @@ class PatientController extends Controller
                 'b_pressure' => 'required',
                 'respiration' => 'required',
                 'diet' => 'required',
-                'profile_photo' => 'image|mimes:jpg,png,jpeg,gif,svg|max:500'
+               // 'profile_photo' => 'image|mimes:jpg,png,jpeg,gif,svg|max:500'
             ]);
             if ($request->profile_photo != null) {
                 $request->validate([
@@ -261,7 +261,7 @@ class PatientController extends Controller
                         'age' => 'required|numeric',
                         'address' => 'required',
                         'gender' => 'required',
-                        'profile_photo' => 'image|mimes:jpg,png,jpeg,gif,svg|max:5000'
+                      //  'profile_photo' => 'image|mimes:jpg,png,jpeg,gif,svg|max:5000'
                     ]);
                 }
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Appointment;
 use App\Clinic;
+use App\Doctor;
 use App\Invoice;
 use App\ReceptionListDoctor;
 use Exception;
@@ -87,16 +88,18 @@ class ReceptionistController extends Controller
      */
     public function store(Request $request)
     {
+
         $user = Sentinel::getUser();
         if ($user->hasAccess('receptionist.create')) {
-            $doctor_id =  $request->doctor;
+            $doctor_id =Doctor::query()->select('id')->get()->all();  //$request->doctor;
+//            return $doctor_id;
             $validatedData = $request->validate([
                 'first_name' => 'required|alpha',
                 'last_name' => 'required|alpha',
                 'mobile' => 'required|numeric|digits:10',
                 'email' => 'required|email|unique:users',
-                'doctor' => 'required',
-                'profile_photo' =>'image|mimes:jpg,png,jpeg,gif,svg|max:500'
+               // 'doctor' => 'required',
+              //  'profile_photo' =>'image|mimes:jpg,png,jpeg,gif,svg|max:500'
             ]);
             if ($request->profile_photo != null) {
                 $request->validate([
@@ -120,7 +123,7 @@ class ReceptionistController extends Controller
                     ->attach($receptionist);
                 foreach ($doctor_id as $item) {
                     $receptionistDoctor  = new ReceptionListDoctor();
-                    $receptionistDoctor->doctor_id = $item;
+                    $receptionistDoctor->doctor_id = $item->id;
                     $receptionistDoctor->reception_id = $receptionist->id;
                     $receptionistDoctor->save();
                 }
@@ -239,12 +242,12 @@ class ReceptionistController extends Controller
         $user = Sentinel::getUser();
         if ($user->hasAccess('receptionist.update')) {
             $validatedData = $request->validate([
-                'first_name' => 'required|alpha',
-                'last_name' => 'required|alpha',
-                'mobile' => 'required|numeric|digits:10',
-                'email' => 'required|email',
-                'doctor' => 'required',
-                'profile_photo' =>'image|mimes:jpg,png,jpeg,gif,svg|max:500'
+//                'first_name' => 'required|alpha',
+//                'last_name' => 'required|alpha',
+//                'mobile' => 'required|numeric|digits:10',
+//                'email' => 'required|email',
+//                'doctor' => 'required',
+              //  'profile_photo' =>'image|mimes:jpg,png,jpeg,gif,svg|max:500'
             ]);
             try {
                 $user = Sentinel::getUser();
@@ -262,6 +265,7 @@ class ReceptionistController extends Controller
                 }
                 $receptionist->first_name = $validatedData['first_name'];
                 $receptionist->last_name = $validatedData['last_name'];
+                //return 'sss';
                 $receptionist->mobile = $validatedData['mobile'];
                 $receptionist->email = $validatedData['email'];
                 $receptionist->updated_by = $user->id;
@@ -269,35 +273,38 @@ class ReceptionistController extends Controller
                 $new_doctor = $request->doctor;
                 $numArray = array_map('intval', $new_doctor);
                 // remove old Doctor
-                $differenceArray1 = array_diff($old_doctor, $numArray);
+               // $differenceArray1 =$doctor_id =Doctor::query()->select('id')->get()->all();  //$request->doctor;
+//array_diff($old_doctor, $numArray);
                 // add New Doctor
-                $differenceArray2 = array_diff($numArray, $old_doctor);
+                $differenceArray2  =Doctor::query()->select('id')->get()->all();  //$request->doctor;
+//array_diff($numArray, $old_doctor);
                 $receptionistDoctor = ReceptionListDoctor::where('reception_id', $receptionist->id)->pluck('doctor_id');
-                if ($differenceArray1 && $differenceArray2) {
-                    // Add and remove both Doctor
-                    if ($differenceArray1) {
-                        $receptionistDoctor = ReceptionListDoctor::whereIn('doctor_id', $differenceArray1)->delete();
-                    }
-                    if ($differenceArray2) {
+//                if ($differenceArray1 && $differenceArray2) {
+//                    // Add and remove both Doctor
+//                    if ($differenceArray1) {
+//                        $receptionistDoctor = ReceptionListDoctor::whereIn('doctor_id', $differenceArray1)->delete();
+//                    }
+//                    if ($differenceArray2) {
                         foreach ($differenceArray2 as $item) {
                             $receptionistDoctor = new ReceptionListDoctor();
-                            $receptionistDoctor->doctor_id = $item;
+                            $receptionistDoctor->doctor_id = $item->id;
                             $receptionistDoctor->reception_id = $receptionist->id;
                             $receptionistDoctor->save();
+//                        }
+//                    }
+//                } elseif ($differenceArray1) {
+//                    // only remove Doctor
+//                    $receptionistDoctor = ReceptionListDoctor::whereIn('doctor_id', $differenceArray1)->delete();
+//                } elseif ($differenceArray2) {
+//                    // only add doctor
+//                    foreach ($differenceArray2 as $item) {
+//                        $receptionistDoctor = new ReceptionListDoctor();
+//                        $receptionistDoctor->doctor_id = $item;
+//                        $receptionistDoctor->reception_id = $receptionist->id;
+//                        $receptionistDoctor->save();
+//                    }
+//                }
                         }
-                    }
-                } elseif ($differenceArray1) {
-                    // only remove Doctor
-                    $receptionistDoctor = ReceptionListDoctor::whereIn('doctor_id', $differenceArray1)->delete();
-                } elseif ($differenceArray2) {
-                    // only add doctor
-                    foreach ($differenceArray2 as $item) {
-                        $receptionistDoctor = new ReceptionListDoctor();
-                        $receptionistDoctor->doctor_id = $item;
-                        $receptionistDoctor->reception_id = $receptionist->id;
-                        $receptionistDoctor->save();
-                    }
-                }
                 $receptionist->save();
                 if ($role == 'receptionist') {
                     return redirect('/')->with('success', 'Profile updated successfully!');
@@ -310,6 +317,7 @@ class ReceptionistController extends Controller
         } else {
             return view('error.403');
         }
+
     }
 
     /**

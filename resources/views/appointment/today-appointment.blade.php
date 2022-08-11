@@ -65,7 +65,9 @@
                                                 <th>{{ __('Date') }}</th>
                                                 <th>{{ __('Time') }}</th>
                                                 <th>{{ __('Status') }}</th>
+                                                @if($role!='admin')
                                                 <th>{{ __('Action') }}</th>
+                                                @endif
                                             </tr>
                                         </thead>
                                         <tbody>

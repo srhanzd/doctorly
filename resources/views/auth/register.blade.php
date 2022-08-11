@@ -17,7 +17,7 @@
                                 <div class="col-7">
                                     <div class="text-primary p-4">
                                         <h5 class="text-primary">{{ __("Patient Register") }}</h5>
-                                        <p>Get your free {{ config('app.name') }} Patient account now.</p>
+                                        <p>Get your free Pro touch Patient account now.</p>
                                     </div>
                                 </div>
                                 <div class="col-5 align-self-end">
@@ -27,16 +27,16 @@
                             </div>
                         </div>
                         <div class="card-body pt-0">
-                            <div>
-                                <a href="{{ url('/') }}">
-                                    <div class="avatar-md profile-user-wid mb-4">
-                                        <span class="avatar-title rounded-circle bg-light">
-                                            <img src="{{ URL::asset('assets/images/logo.png') }}" alt=""
-                                                class="rounded-circle" height="34">
-                                        </span>
-                                    </div>
-                                </a>
-                            </div>
+{{--                            <div>--}}
+{{--                                <a href="{{ url('/') }}">--}}
+{{--                                    <div class="avatar-md profile-user-wid mb-4">--}}
+{{--                                        <span class="avatar-title rounded-circle bg-light">--}}
+{{--                                            <img src="{{ URL::asset('assets/images/logo.png') }}" alt=""--}}
+{{--                                                class="rounded-circle" height="34">--}}
+{{--                                        </span>--}}
+{{--                                    </div>--}}
+{{--                                </a>--}}
+{{--                            </div>--}}
                             <div class="p-2">
                                 <form method="POST" class="form-horizontal mt-4" action="{{ url('register') }}">
                                     @csrf
@@ -124,7 +124,7 @@
                                             type="submit">{{ __("Register") }}</button>
                                     </div>
                                     <div class="mt-4 text-center">
-                                        <p class="mb-0">By registering you agree to the {{ config('app.name'); }} <a href="#" class="text-primary">{{ __("Terms of Use") }}</a></p>
+                                        <p class="mb-0">By registering you agree to the Pro touch <a href="#" class="text-primary">{{ __("Terms of Use") }}</a></p>
                                     </div>
                                 </form>
                             </div>
@@ -133,7 +133,7 @@
                     <div class="mt-5 text-center">
                         <p>{{ __("Already have an account ?") }} <a href="{{ url('login') }}"
                                 class="font-weight-medium text-primary">{{ __("Login") }} </a> </p>
-                        <p>© {{ date('Y') }} {{ config('app.name'); }}. Crafted with <i class="mdi mdi-heart text-danger"></i> {{ __("by Themesbrand") }}</p>
+                        <p>© {{ date('Y') }} Pro touch. Crafted with <i class="mdi mdi-heart text-danger"></i> by heroes of digital</p>
                     </div>
                 </div>
             </div>

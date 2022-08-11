@@ -44,6 +44,7 @@ class PrescriptionController extends Controller
      */
     public function index()
     {
+
         $doctors  = User::join('doctors', 'users.id', '=', 'doctors.user_id')
             ->get(['users.*', 'doctors.*']);
         $clinics=Clinic::query()->get();
@@ -302,8 +303,8 @@ class PrescriptionController extends Controller
         $clinics=Clinic::query()->get();
         $user = Sentinel::getUser();
         $role = $user->roles[0]->slug;
-        // $prescriptions = Prescription::with(['doctor', 'appointment', 'appointment.timeSlot','appointment.invoice'])
-        // ->where('patient_id', $user->id)->where('is_deleted', 0)->orderBy('id', 'desc')->paginate($this->limit);
+        $prescriptions_details = Prescription::with(['doctor', 'appointment', 'appointment.timeSlot','appointment.invoice'])
+        ->where('patient_id', $user->id)->where('is_deleted', 0)->orderBy('id', 'desc')->paginate($this->limit);
         $prescription = Invoice::where('payment_status','Paid')
         ->with('doctor', 'appointment','appointment.timeSlot','appointment.invoice','appointment.prescription')
         ->where('patient_id', $user->id)->where('is_deleted', 0)->orderBy('id', 'desc')
@@ -317,9 +318,9 @@ class PrescriptionController extends Controller
                 $pre = $prescriptions;
             }
         }
-        $prescriptions_details = Invoice::where('payment_status','Paid')->with('doctor','appointment', 'appointment.timeSlot','appointment.prescription')
-            ->WhereIn('id',$prescriptions)->orderBy('id', 'desc')
-            ->paginate($this->limit);
+//        $prescriptions_details = Invoice::where('payment_status','Paid')->with('doctor','appointment', 'appointment.timeSlot','appointment.prescription')
+//            ->WhereIn('id',$prescriptions)->orderBy('id', 'desc')
+//            ->paginate($this->limit);
         // return $prescriptions_details;
         return view('patient.patient-prescriptions', compact('doctors','clinics','user', 'role', 'prescriptions_details'));
     }
@@ -335,17 +336,17 @@ class PrescriptionController extends Controller
         // $user_details = Prescription::with('patient','appointment','appointment.timeSlot','appointment.invoice')
         // ->where('patient_id', $user->id)->orWhere('id', $id)->where('is_deleted', 0)->first();
         // return $user_details;
-        if ($user_details) {
-            if($user_details->appointment->invoice){
+        //if ($user_details) {
+           // if($user_details->appointment->invoice){
                 $medicines = Medicine::where('prescription_id', $id)->where('is_deleted', 0)->get();
                 $test_reports = TestReport::where('prescription_id', $id)->where('is_deleted', 0)->get();
                 return view('patient.patient-prescription-view', compact('doctors','clinics','user', 'role', 'medicines', 'test_reports', 'user_details'));
-            }
-            else{
-                return redirect()->back()->with('error', 'Invoice details not found');
-            }
-        } else {
-            return redirect()->back()->with('error', 'Prescription not found');
-        }
+          //  }
+//            else{
+//                return redirect()->back()->with('error', 'Invoice details not found');
+//            }
+//        } else {
+//            return redirect()->back()->with('error', 'Prescription not found');
+//        }
     }
 }

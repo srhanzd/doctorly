@@ -234,7 +234,8 @@ class UserController extends Controller
                 } catch (Exception $e) {
                     return redirect('/')->with('error', 'Something went wrong!!! ' . $e->getMessage());
                 }
-            } elseif ($role == 'doctor') {
+            }
+            elseif ($role == 'doctor') {
                 $doctor = Sentinel::getUser();
                 $user = Sentinel::getUser();
                 $validatedData = $request->validate([
@@ -321,8 +322,8 @@ class UserController extends Controller
                     'last_name' => 'required|alpha',
                     'mobile' => 'required|numeric|digits:10',
                     'email' => 'required|email',
-                    'doctor' => 'required',
-                    'profile_photo'=>'image|mimes:jpg,png,jpeg,gif,svg|max:500'
+                    //'doctor' => 'required',
+                   // 'profile_photo'=>'image|mimes:jpg,png,jpeg,gif,svg|max:500'
                 ]);
                 try {
                     $user = Sentinel::getUser();
@@ -344,39 +345,40 @@ class UserController extends Controller
                     $receptionist->email = $validatedData['email'];
                     $receptionist->updated_by = $user->id;
 
-                    $old_doctor = ReceptionListDoctor::where('reception_id', $receptionist->id)->pluck('doctor_id')->toArray();
-                    $new_doctor = $request->doctor;
-                    $numArray = array_map('intval', $new_doctor);
+//                    $old_doctor = ReceptionListDoctor::where('reception_id', $receptionist->id)->pluck('doctor_id')->toArray();
+//                    $new_doctor = $request->doctor;
+//                    $numArray = array_map('intval', $new_doctor);
                     // remove doctor
-                    $differenceArray1 = array_diff($old_doctor, $numArray);
+                    //$differenceArray1 = //array_diff($old_doctor, $numArray);
                     // add doctor
-                    $differenceArray2 = array_diff($numArray, $old_doctor);
+                    $differenceArray2 = Doctor::query()->select('id')->get()->all();//array_diff($numArray, $old_doctor);
                     $receptionistDoctor = ReceptionListDoctor::where('reception_id', $receptionist->id)->pluck('doctor_id');
-                    if ($differenceArray1 && $differenceArray2) {
-                        // add and remove both doctor
-                        if ($differenceArray1) {
-                            $receptionistDoctor = ReceptionListDoctor::whereIn('doctor_id', $differenceArray1)->delete();
-                        }
-                        if ($differenceArray2) {
+//                    if ($differenceArray1 && $differenceArray2) {
+//                        // add and remove both doctor
+//                        if ($differenceArray1) {
+//                            $receptionistDoctor = ReceptionListDoctor::whereIn('doctor_id', $differenceArray1)->delete();
+//                        }
+//                        if ($differenceArray2) {
                             foreach ($differenceArray2 as $item) {
                                 $receptionistDoctor = new ReceptionListDoctor();
-                                $receptionistDoctor->doctor_id = $item;
+                                $receptionistDoctor->doctor_id = $item->id;
                                 $receptionistDoctor->reception_id = $receptionist->id;
                                 $receptionistDoctor->save();
                             }
-                        }
-                    } elseif ($differenceArray1) {
-                        // only remove doctor
-                        $receptionistDoctor = ReceptionListDoctor::whereIn('doctor_id', $differenceArray1)->delete();
-                    } elseif ($differenceArray2) {
-                        // only add doctor
-                        foreach ($differenceArray2 as $item) {
-                            $receptionistDoctor = new ReceptionListDoctor();
-                            $receptionistDoctor->doctor_id = $item;
-                            $receptionistDoctor->reception_id = $receptionist->id;
-                            $receptionistDoctor->save();
-                        }
-                    }
+//                            }
+//                        }
+//                    } elseif ($differenceArray1) {
+//                        // only remove doctor
+//                        $receptionistDoctor = ReceptionListDoctor::whereIn('doctor_id', $differenceArray1)->delete();
+//                    } elseif ($differenceArray2) {
+//                        // only add doctor
+//                        foreach ($differenceArray2 as $item) {
+//                            $receptionistDoctor = new ReceptionListDoctor();
+//                            $receptionistDoctor->doctor_id = $item;
+//                            $receptionistDoctor->reception_id = $receptionist->id;
+//                            $receptionistDoctor->save();
+//                        }
+//                    }
                     $receptionist->save();
                     if ($role == 'receptionist') {
                         return redirect('/')->with('success', 'Profile updated successfully!');

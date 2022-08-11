@@ -5,7 +5,7 @@
             <h4 class="mb-0 font-size-18">{{ __('Dashboard') }}</h4>
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
-                    <li class="breadcrumb-item active">Welcome to {{ config('app.name') }} Dashboard</li>
+                    <li class="breadcrumb-item active">Pro Touch Dashboard</li>
                 </ol>
             </div>
         </div>
@@ -21,7 +21,7 @@
                     <div class="col-7">
                         <div class="text-primary p-3">
                             <h5 class="text-primary">{{ __('Welcome Back!') }}</h5>
-                            <p>{{ config('app.name') }} {{ _('Dashboard') }}</p>
+                            <p>Pro Touch {{ _('Dashboard') }}</p>
                         </div>
                     </div>
                     <div class="col-5 align-self-end">
@@ -61,22 +61,22 @@
                 </div>
             </div>
         </div>
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title mb-4">{{ __('Monthly Earning') }}</h4>
-                <div class="row">
-                    <div class="col-sm-6">
-                        <p class="text-muted">{{ __('This month') }}</p>
-                        <h3>${{ number_format($data['monthly_earning']) }}</h3>
-                        <p class="text-muted"><span class="@if ($data['monthly_diff'] > 0) text-success @else text-danger @endif mr-2"> {{ $data['monthly_diff'] }}% <i class="mdi @if ($data['monthly_diff'] > 0) mdi-arrow-up @else mdi-arrow-down @endif"></i> </span>
-                            {{ __('From previous month') }}</p>
-                    </div>
-                    <div class="col-sm-6">
-                        <div id="radialBar-chart" class="apex-charts"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
+{{--        <div class="card">--}}
+{{--            <div class="card-body">--}}
+{{--                <h4 class="card-title mb-4">{{ __('Monthly Earning') }}</h4>--}}
+{{--                <div class="row">--}}
+{{--                    <div class="col-sm-6">--}}
+{{--                        <p class="text-muted">{{ __('This month') }}</p>--}}
+{{--                        <h3>${{ number_format($data['monthly_earning']) }}</h3>--}}
+{{--                        <p class="text-muted"><span class="@if ($data['monthly_diff'] > 0) text-success @else text-danger @endif mr-2"> {{ $data['monthly_diff'] }}% <i class="mdi @if ($data['monthly_diff'] > 0) mdi-arrow-up @else mdi-arrow-down @endif"></i> </span>--}}
+{{--                            {{ __('From previous month') }}</p>--}}
+{{--                    </div>--}}
+{{--                    <div class="col-sm-6">--}}
+{{--                        <div id="radialBar-chart" class="apex-charts"></div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        </div>--}}
         <div class="col-xl-8">
             <div class="card mini-stats-wid">
                 <div class="card-body">
@@ -117,7 +117,7 @@
     </div>
     <div class="col-xl-8">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-6">
                 <div class="card mini-stats-wid">
                     <div class="card-body">
                         <div class="media">
@@ -134,41 +134,41 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card mini-stats-wid">
-                    <div class="card-body">
-                        <div class="media">
-                            <div class="media-body">
-                                <p class="text-muted font-weight-medium">{{ __('Revenue') }}</p>
-                                <h4 class="mb-0">${{ number_format($data['revenue'], 2) }}</h4>
-                            </div>
-                            <div class="avatar-sm rounded-circle bg-primary align-self-center mini-stat-icon">
-                                <span class="avatar-title rounded-circle bg-primary">
-                                    <i class="bx bx-dollar font-size-24"></i>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card mini-stats-wid">
-                    <div class="card-body">
-                        <div class="media">
-                            <div class="media-body">
-                                <p class="text-muted font-weight-medium">{{ __("Today's Earning") }}</p>
-                                <h4 class="mb-0">${{ number_format($data['daily_earning'], 2) }}</h4>
-                            </div>
-                            <div class="avatar-sm rounded-circle bg-primary align-self-center mini-stat-icon">
-                                <span class="avatar-title rounded-circle bg-primary">
-                                    <i class="bx bxs-dollar-circle  font-size-24"></i>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
+{{--            <div class="col-md-4">--}}
+{{--                <div class="card mini-stats-wid">--}}
+{{--                    <div class="card-body">--}}
+{{--                        <div class="media">--}}
+{{--                            <div class="media-body">--}}
+{{--                                <p class="text-muted font-weight-medium">{{ __('Revenue') }}</p>--}}
+{{--                                <h4 class="mb-0">${{ number_format($data['revenue'], 2) }}</h4>--}}
+{{--                            </div>--}}
+{{--                            <div class="avatar-sm rounded-circle bg-primary align-self-center mini-stat-icon">--}}
+{{--                                <span class="avatar-title rounded-circle bg-primary">--}}
+{{--                                    <i class="bx bx-dollar font-size-24"></i>--}}
+{{--                                </span>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--            <div class="col-md-4">--}}
+{{--                <div class="card mini-stats-wid">--}}
+{{--                    <div class="card-body">--}}
+{{--                        <div class="media">--}}
+{{--                            <div class="media-body">--}}
+{{--                                <p class="text-muted font-weight-medium">{{ __("Today's Earning") }}</p>--}}
+{{--                                <h4 class="mb-0">${{ number_format($data['daily_earning'], 2) }}</h4>--}}
+{{--                            </div>--}}
+{{--                            <div class="avatar-sm rounded-circle bg-primary align-self-center mini-stat-icon">--}}
+{{--                                <span class="avatar-title rounded-circle bg-primary">--}}
+{{--                                    <i class="bx bxs-dollar-circle  font-size-24"></i>--}}
+{{--                                </span>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+            <div class="col-6">
                 <div class="card mini-stats-wid">
                     <div class="card-body">
                         <div class="media">
@@ -188,7 +188,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-6">
                 <div class="card mini-stats-wid">
                     <div class="card-body">
                         <div class="media">
@@ -205,7 +205,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-6">
                 <div class="card mini-stats-wid">
                     <div class="card-body">
                         <div class="media">
@@ -252,7 +252,7 @@
                                 <th>{{ __('Patient Email') }}</th>
                                 <th>{{ __('Date') }}</th>
                                 <th>{{ __('Time') }}</th>
-                                <th>{{ __('Options') }}</th>
+{{--                                <th>{{ __('Options') }}</th>--}}
                             </tr>
                         </thead>
                         <tbody>
@@ -264,15 +264,15 @@
                                     <td>{{ $item->patient->email }}</td>
                                     <td>{{ $item->appointment_date }}</td>
                                     <td>{{ $item->timeSlot->from . ' to ' . $item->timeSlot->to }}</td>
-                                    <td>
-                                        <a href="tel:{{ $item->patient->mobile }}">
-                                            <button type="button"
-                                                class="btn btn-primary btn-sm btn-rounded waves-effect waves-light"
-                                                data-toggle="modal" data-target=".exampleModal">
-                                                {{ __('Call') }}
-                                            </button>
-                                        </a>
-                                    </td>
+{{--                                    <td>--}}
+{{--                                        <a href="tel:{{ $item->patient->mobile }}">--}}
+{{--                                            <button type="button"--}}
+{{--                                                class="btn btn-primary btn-sm btn-rounded waves-effect waves-light"--}}
+{{--                                                data-toggle="modal" data-target=".exampleModal">--}}
+{{--                                                {{ __('Call') }}--}}
+{{--                                            </button>--}}
+{{--                                        </a>--}}
+{{--                                    </td>--}}
                                 </tr>
                             @endforeach
                         </tbody>

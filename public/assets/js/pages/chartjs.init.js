@@ -309,7 +309,7 @@ File: ChartJs init Js File
         // for legend
         hoverBorderColor: "#fff"
       }],
-      labels: ["Series 1", "Series 2", "Series 3", "Series 4"]
+      labels: ["Series 1"]
     };
     this.respChart($("#polarArea"), 'PolarArea', polarChart);
   }, $.ChartJs = new ChartJs(), $.ChartJs.Constructor = ChartJs;

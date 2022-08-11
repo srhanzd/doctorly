@@ -54,7 +54,7 @@
                     </div>
                     <div class="mt-5 text-center">
                         <p>{{ __("Remember It?") }} <a href="{{ url('login') }}" class="font-weight-medium text-primary">{{ __("Sign In here") }}</a></p>
-                        <p class="mb-0">© {{ date('Y') }} {{ config('app.name'); }}. Crafted with <i class="mdi mdi-heart text-danger"></i> {{ __("by Themesbrand") }}</p>
+                        <p class="mb-0">© {{ date('Y') }} Pro touch. Crafted with <i class="mdi mdi-heart text-danger"></i>by heroes of digital</p>
                     </div>
                 </div>
             </div>

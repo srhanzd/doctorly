@@ -65,13 +65,13 @@
                                                         <i class="mdi mdi-eye"></i>
                                                     </button>
                                                 </a>
-                                                <a href="{{ url('receptionist/' . $receptionist->id . '/edit') }}">
-                                                    <button type="button"
-                                                        class="btn btn-primary btn-sm btn-rounded waves-effect waves-light mb-2 mb-md-0"
-                                                        title="Update Profile">
-                                                        <i class="mdi mdi-lead-pencil"></i>
-                                                    </button>
-                                                </a>
+{{--                                                <a href="{{ url('receptionist/' . $receptionist->id . '/edit') }}">--}}
+{{--                                                    <button type="button"--}}
+{{--                                                        class="btn btn-primary btn-sm btn-rounded waves-effect waves-light mb-2 mb-md-0"--}}
+{{--                                                        title="Update Profile">--}}
+{{--                                                        <i class="mdi mdi-lead-pencil"></i>--}}
+{{--                                                    </button>--}}
+{{--                                                </a>--}}
                                                 <a href="javascript:void(0)">
                                                     <button type="button"
                                                         class="btn btn-primary btn-sm btn-rounded waves-effect waves-light mb-2 mb-md-0"

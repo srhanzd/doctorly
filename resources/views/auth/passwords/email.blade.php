@@ -17,7 +17,7 @@
                                 <div class="col-7">
                                     <div class="text-primary p-4">
                                         <h5 class="text-primary">{{ __("Reset Password") }}</h5>
-                                        <p>Reset your password with {{ config('app.name'); }}.</p>
+                                        <p>Reset your password with Pro touch .</p>
                                     </div>
                                 </div>
                                 <div class="col-5 align-self-end">
@@ -27,28 +27,28 @@
                             </div>
                         </div>
                         <div class="card-body pt-0">
-                            <div>
-                                <a href="{{ url('/') }}">
-                                    <div class="avatar-md profile-user-wid mb-4">
-                                        <span class="avatar-title rounded-circle bg-light">
-                                            <img src="{{ URL::asset('images/logo.png') }}" alt="Doctorly"
-                                                class="rounded-circle" height="34">
-                                        </span>
-                                    </div>
-                                </a>
-                            </div>
+{{--                            <div>--}}
+{{--                                <a href="{{ url('/') }}">--}}
+{{--                                    <div class="avatar-md profile-user-wid mb-4">--}}
+{{--                                        <span class="avatar-title rounded-circle bg-light">--}}
+{{--                                            <img src="{{ URL::asset('images/logo.png') }}" alt="Doctorly"--}}
+{{--                                                class="rounded-circle" height="34">--}}
+{{--                                        </span>--}}
+{{--                                    </div>--}}
+{{--                                </a>--}}
+{{--                            </div>--}}
                             <div class="p-2">
                                 <h4>{{ __("Hello,") }} {{ $user->first_name }} {{ $user->last_name }} </h4>
                                 <p>
-                                    <a href="{{ url('reset-password/' . $user->id . '/' . $token) }}">{{ __("Click here") }}</a> to reset your {{ config('app.name'); }} account password.</p>
+                                    <a href="{{ url('reset-password/' . $user->id . '/' . $token) }}">{{ __("Click here") }}</a> to reset your Pro touch account password.</p>
                                 <p> {{ __("If password reset request is not raised by you then immediately change your password to secure your account.") }}</p>
                                 <p>{{ __("Thank you,") }}</p>
-                                <p>{{ config('app.name'); }}.</p>
+                                <p>Pro touch.</p>
                             </div>
                         </div>
                     </div>
                     <div class="mt-5 text-center">
-                        <p>© {{ date('Y') }} {{ config('app.name'); }}. Crafted with <i class="mdi mdi-heart text-danger"></i> {{ __("by Themesbrand") }}</p>
+                        <p>© {{ date('Y') }} Pro touch . Crafted with <i class="mdi mdi-heart text-danger"></i> by heroes of digital</p>
                     </div>
                 </div>
             </div>

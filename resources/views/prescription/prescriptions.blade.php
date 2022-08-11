@@ -135,14 +135,14 @@
                                                 </a>
                                             @endif
                                             @if ($role != 'patient')
-                                                <a href="javascript:void(0)">
-                                                    <button type="button"
-                                                        class="btn btn-primary btn-sm btn-rounded waves-effect waves-light
-                                                                send-mail"
-                                                        title="Send Email" data-id="{{ $prescription->id }}">
-                                                        <i class="mdi mdi-email"></i>
-                                                    </button>
-                                                </a>
+{{--                                                <a href="javascript:void(0)">--}}
+{{--                                                    <button type="button"--}}
+{{--                                                        class="btn btn-primary btn-sm btn-rounded waves-effect waves-light--}}
+{{--                                                                send-mail"--}}
+{{--                                                        title="Send Email" data-id="{{ $prescription->id }}">--}}
+{{--                                                        <i class="mdi mdi-email"></i>--}}
+{{--                                                    </button>--}}
+{{--                                                </a>--}}
                                             @endif
                                         </td>
                                     </tr>
