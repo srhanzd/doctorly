@@ -32,9 +32,9 @@
                     <div class="card-body">
                         <div class="invoice-title">
                             <h4 class="float-right font-size-16">Prescription #{{ $prescription->id }}</h4>
-{{--                            <div class="mb-4">--}}
-{{--                                <img src="{{ URL::asset('assets/images/logo-dark.png') }}" alt="logo" height="20" />--}}
-{{--                            </div>--}}
+                            <div class="mb-4">
+                                <img src="{{ URL::asset('assets/images/logo-dark.png') }}" alt="logo" height="30" />
+                            </div>
                         </div>
                         <hr>
                         <div class="row">

@@ -18,7 +18,7 @@
                         <div class="bg-primary">
                             <div class="text-primary text-center p-4">
                                 <h5 class="text-white font-size-20 p-2">{{ __("Confirm Password") }}</h5>
-                                <img src="{{ URL::asset('assets/images/logo-sm.png') }}" height="24" alt="logo">
+                                <img src="{{ URL::asset('assets/images/logo.png') }}" height="75" alt="logo">
                             </div>
                         </div>
                         <div class="card-body p-4">

@@ -30,16 +30,16 @@
                             </div>
                         </div>
                         <div class="card-body pt-0">
-{{--                            <div>--}}
-{{--                                <a href="{{ url('/') }}">--}}
-{{--                                <div class="avatar-md profile-user-wid mb-4">--}}
-{{--                                    <span class="avatar-title rounded-circle bg-light">--}}
-{{--                                        <img src="{{ URL::asset('assets/images/logo.png') }}" alt=""--}}
-{{--                                            class="rounded-circle" height="34">--}}
-{{--                                    </span>--}}
-{{--                                </div>--}}
-{{--                                </a>--}}
-{{--                            </div>--}}
+                            <div>
+                                <a href="{{ url('/') }}">
+                                <div class="avatar-md profile-user-wid mb-4">
+                                    <span class="avatar-title rounded-circle bg-light">
+                                        <img src="{{ URL::asset('assets/images/logo.png') }}" alt=""
+                                            class="rounded-circle" height="75">
+                                    </span>
+                                </div>
+                                </a>
+                            </div>
                             <div class="p-2">
                                 <form class="form-horizontal mt-4" method="POST" action="{{ url('reset-password') }}">
                                     @csrf

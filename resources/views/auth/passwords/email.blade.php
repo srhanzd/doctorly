@@ -27,16 +27,16 @@
                             </div>
                         </div>
                         <div class="card-body pt-0">
-{{--                            <div>--}}
-{{--                                <a href="{{ url('/') }}">--}}
-{{--                                    <div class="avatar-md profile-user-wid mb-4">--}}
-{{--                                        <span class="avatar-title rounded-circle bg-light">--}}
-{{--                                            <img src="{{ URL::asset('images/logo.png') }}" alt="Doctorly"--}}
-{{--                                                class="rounded-circle" height="34">--}}
-{{--                                        </span>--}}
-{{--                                    </div>--}}
-{{--                                </a>--}}
-{{--                            </div>--}}
+                            <div>
+                                <a href="{{ url('/') }}">
+                                    <div class="avatar-md profile-user-wid mb-4">
+                                        <span class="avatar-title rounded-circle bg-light">
+                                            <img src="{{ URL::asset('images/logo.png') }}" alt="Doctorly"
+                                                class="rounded-circle" height="75">
+                                        </span>
+                                    </div>
+                                </a>
+                            </div>
                             <div class="p-2">
                                 <h4>{{ __("Hello,") }} {{ $user->first_name }} {{ $user->last_name }} </h4>
                                 <p>
